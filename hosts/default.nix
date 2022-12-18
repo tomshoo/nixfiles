@@ -1,6 +1,6 @@
-{ nixpkgs, nur, home-manager, ... }@opts:
+{ pkgs, nur, home-manager, ... }@opts:
 let
-  lib = nixpkgs.lib;
+  inherit (opts) lib;
   modules = [
     nur.nixosModules.nur
     ../sysconfig
@@ -18,13 +18,17 @@ in {
   default = lib.nixosSystem {
     inherit modules;
 
-    specialArgs = { inherit (opts) system username; };
+    specialArgs = {
+      inherit (opts) system username;
+      inherit pkgs;
+    };
   };
   plasma = lib.nixosSystem {
     inherit modules;
 
     specialArgs = {
       inherit (opts) system username;
+      inherit pkgs;
       profile = "plasma.nix";
     };
   };

@@ -12,13 +12,14 @@ let
     };
 in {
   programs.neovim = {
+    package = pkgs.neovim-unwrapped;
     enable = true;
 
     extraPackages = with pkgs; [
       python310Packages.pynvim
 
       # Language servers
-      rnix-lsp
+      nil
       sumneko-lua-language-server
       rust-analyzer
 

@@ -3,10 +3,7 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, ... }@opts:
-let
-  nur = config.nur;
-  inherit (import ./packages.nix { inherit pkgs nur; }) packages;
-  profile = opts.profile or "gnome"; # Default profile is gnome for the win...
+let profile = opts.profile or "gnome"; # Default profile is gnome for the win...
 in {
   imports = [
     # Include the results of the hardware scan.
@@ -49,7 +46,6 @@ in {
     hardwareClockInLocalTime = true;
   };
 
-  nixpkgs.config.allowUnfree = true;
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
@@ -78,7 +74,17 @@ in {
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
+  # Configure fonts
+  fonts = {
+    fonts = (with pkgs; [ nerdfonts ])
+      ++ (with config.nur.repos; [ rewine.ttf-ms-win10 ]);
+    fontDir.enable = true;
+    enableDefaultFonts = true;
+    fontconfig.defaultFonts.monospace = [ "RobotoMono Nerd Font" ];
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
+  programs.zsh.enable = true;
   users.users.tomshoo = {
     home = "/home/tomshoo";
     description = "Shubhanshu Tomar";
@@ -92,22 +98,21 @@ in {
       "power"
     ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [ firefox ];
+    shell = pkgs.zsh;
   };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  # environment.systemPackages = with pkgs; [
-  #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #   wget
-  #   nix-index
-  #   ntfs3g
-  #   gnome.gnome-tweaks
-  #   gnome.gnome-software
-  #   cloudflare-warp
-  #   gnomeExtensions.appindicator
-  # ] ++ [ nur.repos.rewine.ttf-ms-win10 ];
-
-  environment.systemPackages = packages;
+  environment.systemPackages = (with pkgs; [
+    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    wget
+    nix-index
+    ntfs3g
+    gnome.gnome-tweaks
+    gnome.gnome-software
+    cloudflare-warp
+    gnomeExtensions.appindicator
+  ]);
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -124,6 +129,7 @@ in {
   # services.openssh.enable = true;
 
   services.locate = {
+    enable = true;
     locate = pkgs.plocate;
     interval = "daily";
     localuser = null;

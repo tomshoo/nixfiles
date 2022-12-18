@@ -6,6 +6,10 @@
     desktopManager.gnome.enable = true;
   };
 
+  environment.gnome.excludePackages = with pkgs; [ gnome-console ];
+
+  programs.gnome-terminal.enable = true;
+
   i18n = {
     defaultLocale = "en_US.UTF-8";
     extraLocaleSettings = {

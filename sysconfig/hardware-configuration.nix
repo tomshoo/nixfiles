@@ -15,22 +15,22 @@
   #boot.kernelPackages = pkgs.linuxPackages_latest;
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/ced19c28-2a94-4bc3-a3b5-4b1fc50bd1b8";
+    { device = "/dev/disk/by-label/NIX_ROOT";
       fsType = "ext4";
     };
 
   fileSystems."/boot/efi" =
-    { device = "/dev/disk/by-uuid/DB04-12AF";
+    { device = "/dev/disk/by-label/BOOT";
       fsType = "vfat";
     };
 
   fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/1856c34c-a922-4551-89fe-6f95177a7dd8";
+    { device = "/dev/disk/by-label/NIX_HOME";
       fsType = "btrfs";
     };
 
   fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/fb66712c-205d-4260-8ce6-c64030d52a22";
+    { device = "/dev/disk/by-label/NIX_STORE";
       fsType = "ext4";
     };
 

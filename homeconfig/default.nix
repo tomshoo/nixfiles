@@ -1,14 +1,19 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ ./neovim/init.nix ];
+  imports = [
+    ../applications/home/editors # Configure editors
+    ../applications/home/vcs # Configure Version Control Systems
+    ../applications/home/shell # Configure the shell
+  ];
+
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home.username = "tomshoo";
   home.homeDirectory = "/home/tomshoo";
 
   home.sessionVariables = {
-    TERM = "screen-256color";
+    TERM = "xterm-256color";
     WINIT_UNIX_BACKEND = "x11";
     MOZ_ENABLE_WAYLAND = 1;
     LD_LIBRARY_PATH =
@@ -17,14 +22,19 @@
 
   home.packages = with pkgs; [
     neovide
+    obsidian
     tilix
     go
     unzip
-    nerdfonts
+    # nerdfonts
+    sqlite
+    fzf
+    zoxide
     ripgrep
     nodejs
     rustup
     rust-analyzer
+    gcc
     adw-gtk3
     gnome.gnome-tweaks
     libreoffice-fresh
@@ -37,39 +47,51 @@
       (epkgs: with epkgs; [ vterm ]))
 
     (python310.withPackages
-      (python-packages: with python-packages; [ pip requests ipython pipenv ]))
+      (python-packages: with python-packages; [ pip ipython ]))
   ];
 
-  programs.gh = {
-    enable = true;
-    enableGitCredentialHelper = true;
-  };
-
-  programs.git = {
-    enable = true;
-    userName = "Shubhanshu Tomar";
-    userEmail = "tomarshubhanshu@protonmail.ch";
-    extraConfig = {
-      init.defaultBranch = "master";
-      url = { "https://github.com/" = { insteadOf = [ "gh:" "github:" ]; }; };
-    };
-  };
-
-  programs.bash = {
-    enable = true;
-    bashrcExtra = ''
-      export TERM=screen-256color
-      nix-index-fetch() {
-        filename="index-$(uname -m)-$(uname | tr A-Z a-z)"
-        [ ! -d ~/.cache/nix-index ] && mkdir ~/.cache/nix-index
-        pushd ~/.cache/nix-index/ || return 1
-        wget -q -N https://github.com/Mic92/nix-index-database/releases/latest/download/$filename
-        ln -f $filename files
-        popd || return 1
-      }
-    '';
-    shellAliases = { doom = "~/.emacs.d/bin/doom"; };
-  };
+  # programs.bash = {
+  #   enable = true;
+  #   bashrcExtra = ''
+  #     nix-index-fetch() {
+  #       filename="index-$(uname -m)-$(uname | tr A-Z a-z)"
+  #       [ ! -d ~/.cache/nix-index ] && mkdir ~/.cache/nix-index
+  #       pushd ~/.cache/nix-index/ || return 1
+  #       wget -q -N https://github.com/Mic92/nix-index-database/releases/latest/download/$filename
+  #       ln -f $filename files
+  #       popd || return 1
+  #     }
+  #   '';
+  #   shellAliases = {
+  #     doom = "~/.emacs.d/bin/doom";
+  #     nvim = "TERM=screen-256color nvim";
+  #   };
+  # };
+  #
+  # programs.zsh = {
+  #   enable = true;
+  #   enableAutosuggestions = true;
+  #   enableCompletion = true;
+  #   enableSyntaxHighlighting = true;
+  #   oh-my-zsh = {
+  #     enable = true;
+  #     plugins =
+  #       [ "git" "command-not-found" "sudo" "zsh-interactive-cd" "zoxide" ];
+  #     theme = "clean";
+  #   };
+  #
+  #   shellAliases = { nvim = "TERM=screen-256color nvim"; };
+  #   initExtra = ''
+  #     cd() {
+  #       z "$@"
+  #       if [[ -a shell.nix ]] && [ -z "$NIX_SHELL_ACTIVE" ]; then
+  #         export NIX_SHELL_ACTIVE=1
+  #         nix-shell
+  #       fi
+  #     }
+  #
+  #   '';
+  # };
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;

@@ -10,7 +10,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, nur, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, ... }@inputs:
     let
       username = "tomshoo";
       userdesc = "Shubhanshu Tomar";
@@ -21,7 +21,9 @@
       };
       lib = nixpkgs.lib;
     in {
-      nixosConfigurations =
-        import ./hosts { inherit system nixpkgs home-manager username nur; };
+      nixosConfigurations = import ./hosts {
+        inherit system pkgs username lib userdesc;
+        inherit (inputs) nur home-manager;
+      };
     };
 }

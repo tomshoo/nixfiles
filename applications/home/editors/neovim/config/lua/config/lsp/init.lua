@@ -24,7 +24,7 @@ local lsp_config = {
     vimls = {},
     html = {},
     gopls = {},
-    rnix = {}
+    nil_ls = { settings = { ['nil'] = { formatting = { command = { 'nixfmt' } } } } }
 }
 
 function M.setup()
