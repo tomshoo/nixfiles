@@ -29,7 +29,7 @@ in {
     specialArgs = {
       inherit (opts) system username;
       inherit pkgs;
-      profile = "plasma.nix";
+      profile = "plasma";
     };
   };
 }

@@ -63,6 +63,7 @@ vim.opt.shiftwidth  = 4
 vim.opt.ignorecase  = true
 vim.opt.hidden      = true
 vim.opt.wildmenu    = true
+vim.opt.scrolloff   = 8
 
 vim.g.colorizer_startup = 1
 

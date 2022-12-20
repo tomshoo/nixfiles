@@ -33,8 +33,8 @@ return packer.startup({
     function(use)
         use({ 'wbthomason/packer.nvim' })
         use({ 'lewis6991/impatient.nvim' })
-        use({ 'olimorris/persisted.nvim' })
-        use({ 'samjwill/nvim-unception' })
+        use({ 'olimorris/persisted.nvim' }) --[  ]
+        use({ 'samjwill/nvim-unception' }) -- [  ]
         use({ 'jghauser/mkdir.nvim' })
         use({ 'brenoprata10/nvim-highlight-colors' })
         use({ 'famiu/bufdelete.nvim' })
@@ -43,7 +43,7 @@ return packer.startup({
         use({ 'numToStr/Comment.nvim' })
         use({ 'antoinemadec/FixCursorHold.nvim' })
         use({ 'rbgrouleff/bclose.vim' })
-        use({ 'Darazaki/indent-o-matic' })
+        use({ 'Darazaki/indent-o-matic' }) -- [  ]
         use({ 'bluz71/vim-nightfly-guicolors' })
         use({ 'lewis6991/gitsigns.nvim' })
         use({ 'folke/which-key.nvim' })
@@ -71,9 +71,10 @@ return packer.startup({
         use({ 'folke/tokyonight.nvim' })
         use({ 'Shatur/neovim-ayu' })
         use({ 'j-hui/fidget.nvim' })
+        use({ 'navarasu/onedark.nvim' })
 
         use({ 'petertriho/nvim-scrollbar', requires = 'kevinhwang91/nvim-hlslens' })
-        use({ 'kevinhwang91/nvim-ufo', requires = 'kevinhwang91/promise-async' })
+        use({ 'kevinhwang91/nvim-ufo', requires = 'kevinhwang91/promise-async' }) -- [  ]
         use({ 'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim' })
         use({ 'neovim/nvim-lspconfig', requires = 'williamboman/nvim-lsp-installer' })
         use({ 'lukas-reineke/indent-blankline.nvim', requires = 'nvim-treesitter/nvim-treesitter' })
@@ -96,7 +97,7 @@ return packer.startup({
         } })
 
         use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate', requires = {
-            'yioneko/nvim-yati',
+            'yioneko/nvim-yati', -- [  ]
             'nvim-treesitter/nvim-treesitter-context',
             'nvim-treesitter/nvim-treesitter-textobjects',
             'p00f/nvim-ts-rainbow',

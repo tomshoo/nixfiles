@@ -10,7 +10,10 @@
     userEmail = "tomarshubhanshu@protonmail.ch";
     extraConfig = {
       init.defaultBranch = "master";
-      url = { "https://github.com/" = { insteadOf = [ "gh:" "github:" ]; }; };
+      url = {
+        "https://github.com/" = { insteadOf = [ "gh:" "github:" ]; };
+        "https://gitlab.com/" = { insteadOf = [ "gl:" "gitlab:" ]; };
+      };
     };
   };
 }

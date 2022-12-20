@@ -25,7 +25,7 @@ local function set()
     map("n", "<leader>bn", vim.cmd.BufferNext, { desc = "Go to next buffer" })
     map("n", "<leader>bp", vim.cmd.BufferPrevious, { desc = "Go to previous buffer" })
     map("n", "<leader>bq", "<cmd>bd|quit!<CR>", { desc = "Quit current buffer" })
-    map("n", "<leader>bQ", vim.cmd.BufferWipeout, { desc = "Completly wipe current buffer" })
+    map("n", "<leader>bk", vim.cmd.BufferWipeout, { desc = "Completly wipe current buffer" })
 
     map("n", "<leader>u", "<cmd>TSToggle highlight<CR>", { desc = "Toggle treesitter highlighting" })
     map("n", "<F3>", "<cmd>SymbolsOutline<CR>", { desc = "Show treesitter symbols" })

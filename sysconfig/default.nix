@@ -10,6 +10,7 @@ in {
     ./hardware-configuration.nix
     ./security.nix
     ./cloudflare.nix
+    ./flatpaks.nix
 
     # Enable appropriate desktop profile
     ./profiles/${profile}.nix
@@ -32,6 +33,7 @@ in {
     efiSupport = true;
     useOSProber = true;
     configurationLimit = 5;
+    gfxmodeEfi = "1920x1080";
   };
 
   # networking.hostName = "nixos"; # Define your hostname.
@@ -45,6 +47,8 @@ in {
     timeZone = "Asia/Kolkata";
     hardwareClockInLocalTime = true;
   };
+
+  environment.variables = { NIXPKGS_ALLOW_UNFREE = "1"; };
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -76,13 +80,13 @@ in {
 
   # Configure fonts
   fonts = {
-    fonts = (with pkgs; [ nerdfonts ])
+    fonts = # Enable fonts
+      (with pkgs; [ nerdfonts ])
       ++ (with config.nur.repos; [ rewine.ttf-ms-win10 ]);
     fontDir.enable = true;
     enableDefaultFonts = true;
     fontconfig.defaultFonts.monospace = [ "RobotoMono Nerd Font" ];
   };
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   programs.zsh.enable = true;
   users.users.tomshoo = {
@@ -103,16 +107,13 @@ in {
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = (with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    wget
-    nix-index
-    ntfs3g
-    gnome.gnome-tweaks
-    gnome.gnome-software
-    cloudflare-warp
-    gnomeExtensions.appindicator
-  ]);
+  # environment.systemPackages = (with pkgs; [
+  #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+  #   wget
+  #   nix-index
+  #   ntfs3g
+  #   cloudflare-warp
+  # ]);
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -121,7 +122,6 @@ in {
   #   enable = true;
   #   enableSSHSupport = true;
   # };
-  services.flatpak.enable = true;
 
   # List services that you want to enable:
 
@@ -151,13 +151,15 @@ in {
       options = "--delete-older-than 7d";
     };
     package = pkgs.nixFlakes;
-    extraOptions = "experimental-features = nix-command flakes";
+    extraOptions = ''
+      experimental-features = nix-command flakes impure-derivations
+    '';
   };
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
   # accidentally delete configuration.nix.
-  system.copySystemConfiguration = true;
+  # system.copySystemConfiguration = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
