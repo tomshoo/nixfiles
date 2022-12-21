@@ -2,21 +2,6 @@ local M = {}
 
 local config = {
     yati = { enable = true },
-    ensure_installed = {
-        "c",
-        "lua",
-        "rust",
-        "python",
-        "vim",
-        "toml",
-        "bash",
-        "comment",
-        "rasi",
-        "json",
-        "jsonc",
-        "cpp",
-        "markdown",
-    },
     sync_install = false,
     highlight = {
         enable = true,
@@ -54,21 +39,9 @@ local config = {
 local tsccfg = {
 }
 
-local function tscsetup()
-    local ok, tscontext = pcall(require, 'treesitter-context')
-    if ok then
-        tscontext.setup(tsccfg)
-    end
-end
-
 function M.setup()
-    local ok, treesitter = pcall(require, 'nvim-treesitter.configs')
-    if not ok then
-        return false
-    end
-
-    tscsetup()
-    treesitter.setup(config)
+    require('nvim-treesitter.configs').setup(config)
+    require('treesitter-context').setup(tsccfg)
 end
 
 return M

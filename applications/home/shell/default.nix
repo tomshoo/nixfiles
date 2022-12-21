@@ -33,8 +33,14 @@
 
     oh-my-zsh = {
       enable = true;
-      plugins =
-        [ "git" "command-not-found" "sudo" "zsh-interactive-cd" "zoxide" ];
+      plugins = [
+        "git"
+        "command-not-found"
+        "sudo"
+        "zsh-interactive-cd"
+        "zoxide"
+        "python"
+      ];
       theme = "clean";
     };
 

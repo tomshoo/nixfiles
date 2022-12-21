@@ -18,12 +18,8 @@ local cfg = {
 }
 
 function M.setup()
-    local ok, projects = pcall(require, 'project_nvim')
-    if not ok then
-        return false
-    end
+    local projects = require('project_nvim')
     projects.setup(cfg)
-    return true
 end
 
 return M

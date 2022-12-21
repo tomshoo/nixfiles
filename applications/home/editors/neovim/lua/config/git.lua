@@ -42,13 +42,8 @@ local cfg = {
 }
 
 function M.setup()
-    local ok, neogit = pcall(require, 'neogit')
-    if not ok then
-        return false
-    end
-
+    local neogit = require('neogit')
     neogit.setup(cfg)
-    return true
 end
 
 return M

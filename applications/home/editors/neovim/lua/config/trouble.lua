@@ -13,13 +13,9 @@ local cfg = {
 }
 
 function M.setup()
-    local ok, trouble = pcall(require, 'trouble')
-    if not ok then
-        return false
-    end
+    local trouble = require('trouble')
 
     trouble.setup(cfg)
-    return true
 end
 
 return M

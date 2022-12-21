@@ -40,13 +40,8 @@ local cfg = {
 }
 
 function M.setup()
-    local ok, tree = pcall(require, 'nvim-tree')
-    if not ok then
-        return false
-    end
-
+    local tree = require('nvim-tree')
     tree.setup(cfg)
-    return true
 end
 
 return M

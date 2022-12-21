@@ -5,10 +5,7 @@ local cfg = {
 }
 
 M.setup = function()
-    local ok, clip = pcall(require, 'neoclip')
-    if not ok then
-        return false
-    end
+    local clip = require('neoclip')
     clip.setup(cfg)
     return true
 end

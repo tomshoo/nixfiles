@@ -1,11 +1,13 @@
 local M = {}
 
+local version = vim.version()
+
 local header = {
     [[ _        _______  _______          _________ _______ ]],
     [[( (    /|(  ____ \(  ___  )|\     /|\__   __/(       )]],
-    [[|  \  ( || (    \/| (   ) || )   ( |   ) (   | () () |]],
+    [[|  \  ( || (    \/| (   ) || )   ( |   ) (   | |) (| |]],
     [[|   \ | || (__    | |   | || |   | |   | |   | || || |]],
-    [[| (\ \) ||  __)   | |   | |( (   ) )   | |   | |(_)| |]],
+    [[| (\ \) ||  __)   | |   | |( (   ) )   | |   | |(+)| |]],
     [[| | \   || (      | |   | | \ \_/ /    | |   | |   | |]],
     [[| )  \  || (____/\| (___) |  \   /  ___) (___| )   ( |]],
     [[|/    )_)(_______/(_______)   \_/   \_______/|/     \|]],
@@ -16,11 +18,8 @@ local footer = {
 }
 
 function M.setup()
-    local ok, alpha = pcall(require, "alpha")
+    local alpha = require("alpha")
 
-    if not ok then
-        return false
-    end
     local dashboard = require('alpha.themes.dashboard')
     dashboard.section.header.val = header
     dashboard.section.buttons.val = {
@@ -30,7 +29,7 @@ function M.setup()
         dashboard.button("SPC f g", "  Find word", "<cmd>Telescope live_grep<cr>"),
         dashboard.button("SPC f p", "  Open recent Projects", "<cmd>Telescope projects theme=ivy<CR>"),
         dashboard.button("SPC f c", "  Open neovim config", "<cmd>edit " .. vim.fn.stdpath('config') .. "<CR>"),
-        dashboard.button("SPC s l", "  Open last session", "<cmd>SessionLoadLast<CR>"),
+        dashboard.button("SPC s l", "  Open last session", "<cmd>SearchSession<CR>"),
         dashboard.button("q", "  Quit", "<cmd>quitall!<CR>"),
     }
     dashboard.section.footer.val = footer

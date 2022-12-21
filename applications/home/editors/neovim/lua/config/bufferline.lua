@@ -6,10 +6,7 @@ local cfg = {
 }
 
 function M.setup()
-    local ok, bufferline = pcall(require, 'bufferline')
-    if not ok then
-        return false
-    end
+    local bufferline = require('bufferline')
 
     vim.api.nvim_create_autocmd('BufWinEnter', {
         pattern = '*',

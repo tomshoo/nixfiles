@@ -13,10 +13,7 @@ local cfg = {
     }
 }
 function M.setup()
-    local ok, autopairs = pcall(require, 'nvim-autopairs')
-    if not ok then
-        return false
-    end
+    local autopairs = require('nvim-autopairs')
 
     autopairs.setup(cfg)
 

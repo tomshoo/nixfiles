@@ -11,10 +11,7 @@ local cfg = {
 }
 
 function M.setup()
-    local ok, indentguide = pcall(require, 'indent_blankline')
-    if not ok then
-        return false
-    end
+    local indentguide = require('indent_blankline')
     indentguide.setup(cfg)
 end
 

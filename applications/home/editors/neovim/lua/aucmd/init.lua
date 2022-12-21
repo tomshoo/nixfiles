@@ -1,5 +1,4 @@
 local autable = {
-    "aucmd.reload",
     "aucmd.others",
     "aucmd.filetype",
     "aucmd.lsp"

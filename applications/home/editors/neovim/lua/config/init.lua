@@ -18,8 +18,8 @@ local function load_all()
         'which-key',
         'toggleterm',
         'scrollbar',
+        'nvim-surround',
         'scrollbar.handlers.search',
-        'config.colorscheme',
         'config.projects',
         'config.treesitter',
         'config.session',
@@ -34,13 +34,12 @@ local function load_all()
         'config.dashboard',
         'config.indentguide',
         'config.trouble',
-        'config.wilder',
+        -- 'config.wilder',
         'config.ufo',
-        'config.colorizer',
-        'config.surround',
         'config.clipboard',
         'config.tmux',
     }) do
+        -- print(plug)
         require(plug).setup()
     end
 end

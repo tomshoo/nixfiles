@@ -1,14 +1,15 @@
 { pkgs, lib, ... }:
 let
-  loadPlugin = repo:
-    { ref ? "master", ... }:
+  mkPlugin = repo:
+    { ref ? "main", buildInputs ? [ ], ... }:
     pkgs.vimUtils.buildVimPluginFrom2Nix {
       pname = "${lib.strings.sanitizeDerivationName repo}";
       version = ref;
       src = builtins.fetchGit {
         url = "https://github.com/${repo}.git";
-        ref = ref;
+        inherit ref;
       };
+      inherit buildInputs;
     };
 in {
   programs.neovim = {
@@ -17,7 +18,18 @@ in {
     withPython3 = true;
     enable = true;
 
-    plugins = with pkgs.vimPlugins; [
+    plugins = [
+      (mkPlugin "yioneko/nvim-yati" { })
+      (mkPlugin "samjwill/nvim-unception" { })
+      (mkPlugin "Darazaki/indent-o-matic" { ref = "master"; })
+      (mkPlugin "petertriho/nvim-scrollbar" { })
+      (mkPlugin "aserowy/tmux.nvim" { })
+      (mkPlugin "kevinhwang91/nvim-ufo" { })
+      (mkPlugin "kevinhwang91/promise-async" { })
+      (mkPlugin "rmagatti/session-lens" { })
+    ] ++ (with pkgs.vimPlugins; [
+      auto-session
+      nvim-hlslens
       impatient-nvim
       mkdir-nvim
       colorizer
@@ -31,31 +43,36 @@ in {
       which-key-nvim
       project-nvim
       nvim-autopairs
-      trouble-nvim
       toggleterm-nvim
       nvim-web-devicons
       barbar-nvim
       nvim-tree-lua
       alpha-nvim
-      rust-tools-nvim
-      symbols-outline-nvim
       lualine-nvim
-      nvim-lightbulb
       nvim-surround
       nvim-neoclip-lua
-      lsp_signature-nvim
-      null-ls-nvim
       onedark-nvim
-      scrollbar-nvim
       neogit
-      nvim-lspconfig
       indent-blankline-nvim
 
+      # Lsp plugins
+      nvim-lspconfig
+      null-ls-nvim
+      lsp_signature-nvim
+      lsp-format-nvim
+      nvim-lightbulb
+      rust-tools-nvim
+      symbols-outline-nvim
+      trouble-nvim
+      fidget-nvim
+
+      # Configure telescope
       telescope-nvim
       plenary-nvim
       telescope-ui-select-nvim
       telescope-frecency-nvim
 
+      # nvim-cmp completion engine
       nvim-cmp
       nvim-snippy
       cmp-nvim-lsp
@@ -66,38 +83,36 @@ in {
       lspkind-nvim
       crates-nvim
 
-      (nvim-treesitter.withPlugins (plugins:
-        with plugins;
-        [ c lua rust python json jsonc cpp markdown vim rasi comment bash toml nix ]
-        ))
+      nvim-treesitter.withAllGrammars
       nvim-treesitter-context
       nvim-treesitter-textobjects
       nvim-ts-rainbow
       playground
-    ];
+    ]);
 
     extraPackages = with pkgs; [
       # Language servers
       nil
       sumneko-lua-language-server
       rust-analyzer
+      python310Packages.jedi-language-server
 
       # Null-ls
       shellcheck
       nixfmt
+      python310Packages.autopep8
 
       #Utils
       ripgrep
+      fd
     ];
-    extraConfig = "echo 1";
   };
-
 
   # xdg.configFile."nvim".source = ./config;
   xdg.configFile = {
     "nvim/init.lua".source = ./init.lua;
-    "nvim/lua".source      = ./lua;
-    "nvim/after".source    = ./after;
+    "nvim/lua".source = ./lua;
+    #"nvim/after".source    = ./after;
     "nvim/ftplugin".source = ./ftplugin;
     "nvim/snippets".source = ./snippets;
   };

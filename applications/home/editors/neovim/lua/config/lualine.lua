@@ -1,58 +1,5 @@
 local M = {}
 
-local colors = {
-    black       = '#06080A',
-    bg0         = '#11121D',
-    bg1         = '#1A1B2A',
-    bg2         = '#212234',
-    bg3         = '#353945',
-    bg4         = '#4A5057',
-    bg5         = '#282c34',
-    bg_red      = '#FE6D85',
-    bg_green    = '#98C379',
-    bg_blue     = '#9FBBF3',
-    diff_red    = '#773440',
-    diff_green  = '#587738',
-    diff_blue   = '#354A77',
-    diff_add    = '#1E2326',
-    diff_change = '#262b3d',
-    diff_delete = '#281B27',
-    fg          = '#A0A8CD',
-    red         = '#EE6D85',
-    orange      = '#F6955B',
-    yellow      = '#D7A65F',
-    green       = '#95C561',
-    blue        = '#7199EE',
-    cyan        = '#38A89D',
-    purple      = '#A485DD',
-    grey        = '#4A5057',
-    none        = 'NONE',
-}
-
-local modes = {
-    n      = { icon = ' ', color = colors.blue },
-    i      = { icon = ' ', color = colors.green },
-    v      = { icon = ' ', color = colors.cyan },
-    ['']  = { icon = 'זּ ', color = colors.cyan },
-    V      = { icon = ' ', color = colors.cyan },
-    c      = { icon = ' ', color = colors.yellow },
-    no     = { icon = '! ', color = colors.blue },
-    s      = { icon = '麗', color = colors.purple },
-    S      = { icon = '礪', color = colors.purple },
-    ['']  = { icon = '礪', color = colors.purple },
-    ic     = { icon = ' ', color = colors.green },
-    R      = { icon = '菱', color = colors.red },
-    Rv     = { icon = '菱', color = colors.red },
-    cv     = { icon = '? ', color = colors.yellow },
-    ce     = { icon = '? ', color = colors.yellow },
-    r      = { icon = ' ', color = colors.orange },
-    rm     = { icon = '||', color = colors.orange },
-    ['r?'] = { icon = ' ', color = colors.orange },
-    ['!']  = { icon = ' ', color = colors.blue },
-    t      = { icon = ' ', color = colors.grey },
-}
-
-
 local conditions = {
     buffer_not_empty = function()
         return not (vim.fn.line('$') == 1 and vim.fn.getline(1) == '')
@@ -108,14 +55,6 @@ local filename = {
 
         return name
     end,
-    color = function()
-        if vim.bo.modified then
-            return { fg = colors.red, bg = colors.diff_red }
-        elseif vim.bo.readonly then
-            return { fg = colors.black, bg = colors.bg_red }
-        end
-        return { fg = colors.black, bg = colors.bg_green }
-    end,
 }
 
 local filesize = {
@@ -129,16 +68,13 @@ local window = {
     function()
         return vim.api.nvim_win_get_number(0)
     end,
-    color = function()
-        return { fg = colors.black, bg = modes[vim.fn.mode()].color }
-    end,
 }
 
 local lsp = {
     function()
         local names = {}
         for _, client in ipairs(vim.lsp.get_active_clients({ bufnr = vim.fn.bufnr() })) do
-            table.insert(names, client.name)
+            table.insert(names, string.len(client.name) <= 15 and client.name or "...")
         end
         return '[' .. table.concat(names, ':') .. ']'
     end,
@@ -151,7 +87,6 @@ local trailing_space = {
         local space = vim.fn.search([[\s\+$]], 'nwc')
         return vim.fn.mode() ~= 'i' and space ~= 0 and ' ' .. space or ''
     end,
-    color = { fg = colors.black, bg = colors.blue },
     cond = conditions.hide_in_width
 }
 
@@ -179,23 +114,7 @@ local mixed_indent = {
             return vim.fn.mode() ~= 'i' and '' .. space_indent or ''
         end
     end,
-    color = { fg = colors.black, bg = colors.red },
     cond = conditions.hide_in_width
-}
-
-local stylespace = {
-    function()
-        return ' '
-    end,
-    color = function() return { bg = modes[vim.fn.mode()].color } end,
-    padding = 0
-}
-
-local mode = {
-    function()
-        return modes[vim.fn.mode()].icon
-    end,
-    color = function() return { fg = modes[vim.fn.mode()].color, bg = colors.bg0 } end
 }
 
 local fileformat = {
@@ -216,42 +135,9 @@ local function diff()
     end
 end
 
-local theme = {
-    normal = {
-        a = { bg = colors.bg0, fg = colors.blue, gui = 'bold' },
-        b = { bg = colors.bg1, fg = colors.fg },
-        c = { bg = colors.bg2, fg = colors.blue }
-    },
-    insert = {
-        a = { bg = colors.bg0, fg = colors.green, gui = 'bold' },
-        b = { bg = colors.bg1, fg = colors.fg },
-        c = { bg = colors.bg2, fg = colors.green }
-    },
-    visual = {
-        a = { bg = colors.bg0, fg = colors.purple, gui = 'bold' },
-        b = { bg = colors.bg1, fg = colors.fg },
-        c = { bg = colors.bg2, fg = colors.purple }
-    },
-    replace = {
-        a = { bg = colors.bg0, fg = colors.red, gui = 'bold' },
-        b = { bg = colors.bg1, fg = colors.fg },
-        c = { bg = colors.bg2, fg = colors.red }
-    },
-    command = {
-        a = { bg = colors.bg0, fg = colors.yellow, gui = 'bold' },
-        b = { bg = colors.bg1, fg = colors.fg },
-        c = { bg = colors.bg2, fg = colors.black }
-    },
-    inactive = {
-        a = { bg = colors.bg2, fg = colors.grey, gui = 'bold' },
-        b = { bg = colors.bg2, fg = colors.grey },
-        c = { bg = colors.bg2, fg = colors.grey }
-    }
-}
-
 local help = {
     options = {
-        theme = theme,
+        theme = "auto",
     },
     filetypes = { 'help' },
     sections = {
@@ -276,7 +162,7 @@ local cfg = {
         section_separators = ''
     },
     sections = {
-        lualine_a = { window, mode },
+        lualine_a = { window, "mode" },
         lualine_b = {
             { 'branch', fmt = string.upper },
             { 'diff', source = diff, symbols = { added = ' ', modified = '柳 ', removed = ' ' } },
@@ -296,7 +182,6 @@ local cfg = {
         lualine_y = { fileformat, { 'filetype', icon = { align = 'right' } }, 'location' },
         lualine_z = {
             'progress',
-            stylespace
         }
     },
     extensions = { 'toggleterm', 'nvim-tree', help }
@@ -304,10 +189,7 @@ local cfg = {
 
 
 function M.setup()
-    local ok, lualine = pcall(require, 'lualine')
-    if not ok then
-        return false
-    end
+    local lualine = require('lualine')
 
     lualine.setup(cfg)
 end

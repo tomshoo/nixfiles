@@ -3,10 +3,8 @@ local M = {}
 local cfg = {}
 
 function M.setup()
-    local ok, tmux = pcall(require, 'tmux')
-    if not ok then
-        return false
-    end
+    local tmux = require('tmux')
+
     tmux.setup(cfg)
     map("n", "<C-M>h", tmux.resize_left)
     map("n", "<C-M>j", tmux.resize_bottom)

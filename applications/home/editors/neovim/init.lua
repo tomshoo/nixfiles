@@ -1,8 +1,34 @@
-_G.version = vim.version()
+require("utils")
+require("maps")
+require("config")
+require("aucmd")
 
 vim.cmd.colorscheme "onedark"
 
-vim.cmd [[]]
+vim.cmd [[
+cnoreabbrev <expr> W ((getcmdtype() is# ':' && getcmdline() is# 'W')?('w'):('W'))
+cnoreabbrev <expr> Q ((getcmdtype() is# ':' && getcmdline() is# 'Q')?('q'):('Q'))
+cnoreabbrev <expr> WQ ((getcmdtype() is# ':' && getcmdline() is# 'WQ')?('wq'):('WQ'))
+cnoreabbrev <expr> Wq ((getcmdtype() is# ':' && getcmdline() is# 'Wq')?('wq'):('Wq'))
+
+" Configure backup and undo thingies
+set undodir=~/.vim/tmp/undo//
+set backupdir=~/.vim/tmp/backup//
+set directory=~/.vim/tmp/swap//
+
+if !isdirectory(expand(&undodir))
+    call mkdir(expand(&undodir), "p")
+endif
+if !isdirectory(expand(&backupdir))
+    call mkdir(expand(&backupdir), "p")
+endif
+if !isdirectory(expand(&directory))
+    call mkdir(expand(&directory), "pset")
+endif
+
+let &t_ZH="\e[3m"
+let &t_ZR="\e[23m"
+]]
 
 vim.opt.undofile   = true
 vim.opt.wrap       = false
@@ -49,3 +75,13 @@ end
 
 -- Set cursorhold update time to a larger value to not make things messed up
 vim.g.cursorhold_updatetime = 100
+
+-- Disable netrw
+vim.g.loaded_netrw             = 1
+vim.g.loaded_netrwPlugin       = 1
+vim.g.loaded_netrwSettings     = 1
+vim.g.loaded_netrwFileHandlers = 1
+
+if vim.fn.exists("g:neovide") then
+    require("ginit")
+end

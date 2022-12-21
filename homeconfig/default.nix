@@ -20,12 +20,9 @@
       "${pkgs.zlib}/lib:${pkgs.sqlite.out}/lib:$LD_LIBRARY_PATH";
   };
 
-  home.file.".local/share/fonts".source = config.lib.file.mkOutOfStoreSymlink
-    "/run/current-system/sw/share/X11/fonts";
-
   home.file.".local/share/flatpak/overrides/global".text = ''
     [Context]
-    filesystem=~/.local/share/fonts:ro;
+    filesystem=~/.local/share/fonts:ro;xdg-config/gtk-3.0;xdg-config/gtk-4.0
   '';
 
   home.packages = with pkgs; [

@@ -33,10 +33,7 @@ local ftMap = {
 }
 
 function M.setup()
-    local ok, ufo = pcall(require, 'ufo')
-    if not ok then
-        return false
-    end
+    local ufo = require('ufo')
 
     vim.opt.foldcolumn = '1'
     vim.opt.foldlevelstart = 1000

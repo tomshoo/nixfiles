@@ -19,14 +19,11 @@ local cfg = {
 }
 
 function M.setup()
-    local ok, telescope = pcall(require, 'telescope')
-    if not ok then
-        return false
-    end
+    local telescope = require('telescope')
 
     telescope.setup(cfg)
     telescope.load_extension('ui-select')
-    telescope.load_extension('persisted')
+    telescope.load_extension('session-lens')
     telescope.load_extension('frecency')
     telescope.load_extension('projects')
 end

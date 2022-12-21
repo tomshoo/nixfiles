@@ -20,7 +20,7 @@ function M.setup()
             end
 
             if fmt then
-                fmt.on_attach(client)
+                fmt.on_attach(client, bufnr)
             end
             highlight.setup(client, bufnr)
 
@@ -29,7 +29,6 @@ function M.setup()
             end
         end
     })
-    return true
 end
 
 return M

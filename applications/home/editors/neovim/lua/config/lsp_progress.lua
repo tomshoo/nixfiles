@@ -28,13 +28,8 @@ local cfg = {
 }
 
 function M.setup()
-    local ok, fidget = pcall(require, 'fidget')
-    if not ok then
-        return false
-    end
-
+    local fidget = require('fidget')
     fidget.setup(cfg)
-    return true
 end
 
 return M

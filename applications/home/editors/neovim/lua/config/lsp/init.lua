@@ -16,7 +16,7 @@ local lsp_config = {
             }
         }
     },
-    pyright = {},
+    jedi_language_server = {},
     clangd = {},
     bashls = {},
     jsonls = {},
