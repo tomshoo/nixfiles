@@ -15,8 +15,8 @@
   programs.bash = {
     enable = true;
     bashrcExtra = ''
-      ${builtins.readFile ./bash/extra.bash}
       ${builtins.readFile ./common.sh}
+      ${builtins.readFile ./bash/extra.bash}
     '';
 
     shellAliases = {
@@ -38,17 +38,23 @@
         "command-not-found"
         "sudo"
         "zsh-interactive-cd"
-        "zoxide"
         "python"
+        "copyfile"
+        "copybuffer"
+        "web-search"
+        "fastfile"
       ];
       theme = "clean";
     };
 
-    shellAliases = { nvim = "TERM=screen-256color nvim"; };
+    shellAliases = {
+      nvim = "TERM=screen-256color nvim";
+      ls = "exa";
+    };
 
     initExtra = ''
-      ${builtins.readFile ./zsh/extra.zsh}
       ${builtins.readFile ./common.sh}
+      ${builtins.readFile ./zsh/extra.zsh}
     '';
   };
 }

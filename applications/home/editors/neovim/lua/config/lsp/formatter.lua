@@ -15,6 +15,7 @@ function M.setup()
         nullls.setup({ sources = {
             fmt.autopep8,
             fmt.nixfmt,
+            fmt.prettier,
             diag.shellcheck,
         } })
     end)

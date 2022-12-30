@@ -1,16 +1,5 @@
 { pkgs, lib, ... }:
-let
-  mkPlugin = repo:
-    { ref ? "main", buildInputs ? [ ], ... }:
-    pkgs.vimUtils.buildVimPluginFrom2Nix {
-      pname = "${lib.strings.sanitizeDerivationName repo}";
-      version = ref;
-      src = builtins.fetchGit {
-        url = "https://github.com/${repo}.git";
-        inherit ref;
-      };
-      inherit buildInputs;
-    };
+let plugins = import ./plugins.nix { inherit pkgs lib; };
 in {
   programs.neovim = {
     package = pkgs.neovim-unwrapped;
@@ -18,99 +7,48 @@ in {
     withPython3 = true;
     enable = true;
 
-    plugins = [
-      (mkPlugin "yioneko/nvim-yati" { })
-      (mkPlugin "samjwill/nvim-unception" { })
-      (mkPlugin "Darazaki/indent-o-matic" { ref = "master"; })
-      (mkPlugin "petertriho/nvim-scrollbar" { })
-      (mkPlugin "aserowy/tmux.nvim" { })
-      (mkPlugin "kevinhwang91/nvim-ufo" { })
-      (mkPlugin "kevinhwang91/promise-async" { })
-      (mkPlugin "rmagatti/session-lens" { })
-    ] ++ (with pkgs.vimPlugins; [
-      auto-session
-      nvim-hlslens
-      impatient-nvim
-      mkdir-nvim
-      colorizer
-      bufdelete-nvim
-      tabular
-      vim-misc
-      comment-nvim
-      FixCursorHold-nvim
-      bclose-vim
-      gitsigns-nvim
-      which-key-nvim
-      project-nvim
-      nvim-autopairs
-      toggleterm-nvim
-      nvim-web-devicons
-      barbar-nvim
-      nvim-tree-lua
-      alpha-nvim
-      lualine-nvim
-      nvim-surround
-      nvim-neoclip-lua
-      onedark-nvim
-      neogit
-      indent-blankline-nvim
+    inherit plugins;
 
-      # Lsp plugins
-      nvim-lspconfig
-      null-ls-nvim
-      lsp_signature-nvim
-      lsp-format-nvim
-      nvim-lightbulb
-      rust-tools-nvim
-      symbols-outline-nvim
-      trouble-nvim
-      fidget-nvim
+    extraPackages = with pkgs;
+      [
+        # Language servers
+        nil
+        sumneko-lua-language-server
+        rust-analyzer
+        python310Packages.jedi-language-server
 
-      # Configure telescope
-      telescope-nvim
-      plenary-nvim
-      telescope-ui-select-nvim
-      telescope-frecency-nvim
+        # Null-ls
+        shellcheck
+        nixfmt
+        python310Packages.autopep8
 
-      # nvim-cmp completion engine
-      nvim-cmp
-      nvim-snippy
-      cmp-nvim-lsp
-      cmp-buffer
-      cmp-path
-      cmp-nvim-lua
-      cmp-snippy
-      lspkind-nvim
-      crates-nvim
+        #Utils
+        ripgrep
+        fd
+      ] ++ (with nodePackages_latest; [
+        # Node based language servers
+        vim-language-server
+        vscode-langservers-extracted
+        bash-language-server
 
-      nvim-treesitter.withAllGrammars
-      nvim-treesitter-context
-      nvim-treesitter-textobjects
-      nvim-ts-rainbow
-      playground
-    ]);
+        # Null ls
+        prettier
 
-    extraPackages = with pkgs; [
-      # Language servers
-      nil
-      sumneko-lua-language-server
-      rust-analyzer
-      python310Packages.jedi-language-server
-
-      # Null-ls
-      shellcheck
-      nixfmt
-      python310Packages.autopep8
-
-      #Utils
-      ripgrep
-      fd
-    ];
+        # Extra dependencies
+        typescript
+      ]);
   };
 
   # xdg.configFile."nvim".source = ./config;
   xdg.configFile = {
-    "nvim/init.lua".source = ./init.lua;
+    "nvim/init.lua".text = ''
+      _G.typescript = {
+        tsserverPath  = "${pkgs.nodePackages_latest.typescript-language-server}/bin/typescript-language-server",
+        typescriptLib = "${pkgs.nodePackages_latest.typescript}/lib/node_modules/typescript/lib",
+      }
+      ${builtins.readFile ./init.lua}
+    '';
+    "nvim/vimrc.vim".source = ./vimrc.vim;
     "nvim/lua".source = ./lua;
     #"nvim/after".source    = ./after;
     "nvim/ftplugin".source = ./ftplugin;

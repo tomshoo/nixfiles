@@ -2,9 +2,9 @@
 
 {
   imports = [
-    ../applications/home/editors # Configure editors
-    ../applications/home/vcs # Configure Version Control Systems
-    ../applications/home/shell # Configure the shell
+    ../../applications/home/editors # Configure editors
+    ../../applications/home/vcs # Configure Version Control Systems
+    ../../applications/home/shell # Configure the shell
   ];
 
   # Home Manager needs a bit of information about you and the
@@ -16,6 +16,7 @@
     TERM = "xterm-256color";
     WINIT_UNIX_BACKEND = "x11";
     MOZ_ENABLE_WAYLAND = 1;
+    NIXPKGS_ALLOW_UNFREE = 1;
     LD_LIBRARY_PATH =
       "${pkgs.zlib}/lib:${pkgs.sqlite.out}/lib:$LD_LIBRARY_PATH";
   };
@@ -30,6 +31,7 @@
     obsidian
     tilix
     go
+    exa
     unzip
     fzf
     zoxide
@@ -38,15 +40,14 @@
     libreoffice-fresh
     sqlite
     qbittorrent
+    glab
+    postman
 
     wl-clipboard
 
-    ((emacsPackagesFor emacs-gtk).emacsWithPackages
-      (epkgs: with epkgs; [ vterm ]))
-
-    (python310.withPackages
-      (python-packages: with python-packages; [ pip ipython ]))
+    (python310.withPackages (pypkgs: with pypkgs; [ pip ipython ]))
   ];
+  services.lorri.enable = true;
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;

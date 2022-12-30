@@ -1,55 +1,51 @@
 local M = {}
 
-local lsp_config = {
-    sumneko_lua = {
-        settings = {
-            Lua = {
-                runtime = {
-                    version = 'LuaJIT'
-                },
-                diagnostics = {
-                    globals = { 'vim' }
-                },
-                telimitery = {
-                    enable = false
-                }
-            }
-        }
-    },
-    jedi_language_server = {},
-    clangd = {},
-    bashls = {},
-    jsonls = {},
-    cssls = {},
-    vimls = {},
-    html = {},
-    gopls = {},
-    nil_ls = { settings = { ['nil'] = { formatting = { command = { 'nixfmt' } } } } }
+local L_ = {}
+L_.sumneko_lua = { settings = {
+    Lua = {
+        runtime = { version = 'LuaJIT' },
+        diagnostics = { globals = { 'vim', 'typescript' } },
+        telimitery = { enable = false }
+    }
+} }
+
+L_.jedi_language_server = {}
+L_.clangd = {}
+L_.bashls = {}
+L_.jsonls = {}
+L_.eslint = {}
+L_.cssls = {}
+L_.vimls = {}
+
+L_.tsserver = { cmd = {
+    typescript.tsserverPath,
+    '--stdio',
+    '--tsserver-path',
+    typescript.typescriptLib
+} }
+
+L_.html = {}
+L_.gopls = {}
+
+L_.nil_ls = {
+    settings = { ['nil'] = {
+        formatting = { command = { 'nixfmt' } }
+    } }
 }
 
 function M.setup()
-    local cmpup = require('config.lsp.cmpconfig').setup()
-    local ok, installer = pcall(require, 'nvim-lsp-installer')
-    local lok, lspconfig = pcall(require, 'lspconfig')
-    if ok then
-        installer.setup {
-            automatic_installation = true,
-        }
-    end
-    if not lok then
-        return false
-    end
+    require('config.lsp.cmpconfig').setup()
+    local lspconfig = require('lspconfig')
 
-    for server, config in pairs(lsp_config) do
-        if cmpup then
-            config.capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
-            config.capabilities.textDocument.foldinRange = {
-                dynamicRegistration = false,
-                lineFoldingOnly = true
-            }
-        end
+    for server, config in pairs(L_) do
+        config.capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+        config.capabilities.textDocument.foldinRange = {
+            dynamicRegistration = false,
+            lineFoldingOnly = true
+        }
         lspconfig[server].setup(config)
     end
+
     require('config.lsp.tools').setup()
     require('config.lsp.lightbulb').setup()
     require('config.lsp.symbols').setup()
@@ -65,7 +61,6 @@ function M.setup()
         sign define DiagnosticSignInfo text= texthl=DiagnosticSignInfo linehl= numhl=DiagnosticLineNrInfo
         sign define DiagnosticSignHint text= texthl=DiagnosticSignHint linehl= numhl=DiagnosticLineNrHint
     ]]
-    return true
 end
 
 return M

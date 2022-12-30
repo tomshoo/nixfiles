@@ -27,10 +27,10 @@ local function set()
     map("n", "<leader>bq", "<cmd>bd|quit!<CR>", { desc = "Quit current buffer" })
     map("n", "<leader>bk", vim.cmd.BufferWipeout, { desc = "Completly wipe current buffer" })
 
-    map("n", "<leader>u", "<cmd>TSToggle highlight<CR>", { desc = "Toggle treesitter highlighting" })
     map("n", "<F3>", "<cmd>SymbolsOutline<CR>", { desc = "Show treesitter symbols" })
+    map("n", "<F5>", vim.cmd.UndotreeToggle, { desc = "Open file undo tree" })
 
-    map("n", "<leader>E", vim.cmd.NvimTreeToggle)
+    map("n", "<leader>E", vim.cmd.NvimTreeFindFileToggle)
     map("n", "<leader>`", vim.cmd.ToggleTerm)
 
     map("n", "<Home>", extended_home)

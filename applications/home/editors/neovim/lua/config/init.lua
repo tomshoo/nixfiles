@@ -10,6 +10,7 @@ _G.__luacache_config = {
 }
 
 require('impatient')
+require('virt-column').setup({ char = '│' })
 
 local function load_all()
     for _, plug in ipairs({

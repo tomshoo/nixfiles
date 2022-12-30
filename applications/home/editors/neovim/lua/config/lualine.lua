@@ -5,7 +5,7 @@ local conditions = {
         return not (vim.fn.line('$') == 1 and vim.fn.getline(1) == '')
     end,
     hide_in_width = function()
-        return vim.fn.winwidth(0) > 80
+        return vim.fn.winwidth(0) > 110
     end,
     check_git_workspace = function()
         local filepath = vim.fn.expand('%:p:h')
@@ -59,9 +59,7 @@ local filename = {
 
 local filesize = {
     'filesize',
-    cond = function()
-        return conditions.buffer_not_empty() and conditions.hide_in_width()
-    end
+    cond = conditions.hide_in_width
 }
 
 local window = {
@@ -73,12 +71,18 @@ local window = {
 local lsp = {
     function()
         local names = {}
-        for _, client in ipairs(vim.lsp.get_active_clients({ bufnr = vim.fn.bufnr() })) do
-            table.insert(names, string.len(client.name) <= 15 and client.name or "...")
+        for _, client in ipairs(vim.lsp.get_active_clients({
+            bufnr = vim.fn.bufnr()
+        })) do
+            table.insert(
+                names,
+                string.len(client.name) <= 15 and client.name or "...")
         end
-        return '[' .. table.concat(names, ':') .. ']'
+        return conditions.hide_in_width()
+            and '[' .. table.concat(names, ':') .. ']'
+            or string.format('[+%d]', #names)
     end,
-    cond = function() return conditions.lsp_is_active() and conditions.hide_in_width() end,
+    cond = conditions.lsp_is_active,
     icon = ' '
 }
 
@@ -106,8 +110,16 @@ local mixed_indent = {
         if mixed_same_line ~= nil and mixed_same_line > 0 then
             return 'MI:' .. mixed_same_line
         end
-        local space_indent_cnt = vim.fn.searchcount({ pattern = space_pat, max_count = 1e3 }).total
-        local tab_indent_cnt = vim.fn.searchcount({ pattern = tab_pat, max_count = 1e3 }).total
+        local space_indent_cnt = vim.fn.searchcount({
+            pattern = space_pat,
+            max_count = 1e3
+        }).total
+
+        local tab_indent_cnt = vim.fn.searchcount({
+            pattern = tab_pat,
+            max_count = 1e3
+        }).total
+
         if space_indent_cnt > tab_indent_cnt then
             return vim.fn.mode() ~= 'i' and '' .. tab_indent or ''
         else
@@ -129,7 +141,7 @@ local function diff()
     if gitsigns then
         return {
             added = gitsigns.added,
-            modified = gitsigns.modified,
+            modified = gitsigns.changed,
             removed = gitsigns.removed
         }
     end
@@ -164,23 +176,30 @@ local cfg = {
     sections = {
         lualine_a = { window, "mode" },
         lualine_b = {
+            filename,
             { 'branch', fmt = string.upper },
-            { 'diff', source = diff, symbols = { added = ' ', modified = '柳 ', removed = ' ' } },
-            lsp,
-            diagnostics,
-            filesize,
+            { 'diff', source = diff, symbols = {
+                added = ' ',
+                modified = '柳',
+                removed = ' '
+            } },
         },
         lualine_c = {
-            '%=',
-            filename,
-            mixed_indent,
-            trailing_space
+            lsp,
+            diagnostics,
         },
         lualine_x = {
+            filesize,
             { 'encoding', cond = conditions.hide_in_width, fmt = string.upper },
         },
-        lualine_y = { fileformat, { 'filetype', icon = { align = 'right' } }, 'location' },
+        lualine_y = {
+            fileformat,
+            { 'filetype', icon = { align = 'right' } },
+            'location'
+        },
         lualine_z = {
+            mixed_indent,
+            trailing_space,
             'progress',
         }
     },

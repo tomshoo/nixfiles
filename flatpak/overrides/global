@@ -1,2 +1,3 @@
+## /var/lib/flatpak/overrides/global
 [Context]
 filesystems=xdg-config/gtk-3.0;xdg-config/gtk-4.0;

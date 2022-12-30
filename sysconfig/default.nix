@@ -2,24 +2,14 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }@opts:
-let profile = opts.profile or "gnome"; # Default profile is gnome for the win...
-in {
+{ config, pkgs, ... }: {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./security.nix
     ./cloudflare.nix
     ./flatpaks.nix
-
-    # Enable appropriate desktop profile
-    ./profiles/${profile}.nix
   ];
-
-  # Use the systemd-boot EFI boot loader.
-  # boot.loader.systemd-boot.enable = true;
-
-  #boot.loader.configurationLimit = 5;
 
   boot.loader.efi = {
     efiSysMountPoint = "/boot/efi";
@@ -49,6 +39,22 @@ in {
   };
 
   environment.variables = { NIXPKGS_ALLOW_UNFREE = "1"; };
+  i18n = {
+    defaultLocale = "en_US.UTF-8";
+    extraLocaleSettings = {
+      LC_ALL = "en_US.UTF-8";
+      LC_NAME = "en_IN";
+      LC_ADDRESS = "en_IN";
+      LC_MEASUREMENT = "en_IN";
+      LC_PAPER = "en_IN";
+      LC_TIME = "en_IN";
+      LC_IDENTIFICATION = "en_IN";
+      LC_NUMERIC = "en_IN";
+      LC_TELEPHONE = "en_IN";
+    };
+  };
+
+  environment.shells = with pkgs; [ zsh fish ];
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -87,6 +93,7 @@ in {
     enableDefaultFonts = true;
     fontconfig.defaultFonts.monospace = [ "RobotoMono Nerd Font" ];
   };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   programs.zsh.enable = true;
   users.users.tomshoo = {
@@ -104,16 +111,6 @@ in {
     packages = with pkgs; [ firefox ];
     shell = pkgs.zsh;
   };
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  # environment.systemPackages = (with pkgs; [
-  #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #   wget
-  #   nix-index
-  #   ntfs3g
-  #   cloudflare-warp
-  # ]);
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

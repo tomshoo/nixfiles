@@ -13,3 +13,12 @@ load() {
         NIXPKGS_ALLOW_UNFREE=1 nix-shell -p "$package" --run "$command"
     fi
 }
+
+within() {
+    if [ -f shell.nix ]; then
+        nix-shell --run "$*"
+    else
+        echo "cannot create a nix-shell"
+        return 1
+    fi
+}

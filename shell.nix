@@ -5,7 +5,7 @@ pkgs.mkShell {
   description = "...";
   buildInputs = with pkgs; [ nixFlakes ];
 
-  HISTFILE = ''.shell_history'';
+  HISTFILE = ".shell_history";
 
   shellHook = "echo loaded nix flake shell";
 }

@@ -22,3 +22,8 @@ _G.extended_home = function()
         vim.cmd.normal({ "0", bang = true })
     end
 end
+
+local colorcolumn = nil
+_G.toggleColumn = function()
+    vim.opt.colorcolumn, colorcolumn = colorcolumn, vim.opt.colorcolumn
+end

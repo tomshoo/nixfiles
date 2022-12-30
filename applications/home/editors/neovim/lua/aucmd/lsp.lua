@@ -7,6 +7,20 @@ local sign      = require('config.lsp.signatures').setup()
 local fmt       = require('config.lsp.formatter').setup()
 local M         = {}
 
+local ignoreFormatter = {
+    "tsserver",
+}
+
+local function find(tbl, key)
+    for _, property in ipairs(tbl) do
+        if key == property then
+            return true
+        end
+    end
+
+    return false
+end
+
 function M.setup()
     local lspattach = vim.api.nvim_create_augroup("LspAttack", { clear = true })
     vim.api.nvim_create_autocmd({ "LspAttach" }, {
@@ -17,6 +31,11 @@ function M.setup()
 
             if sign then
                 require('lsp_signature').on_attach(sign, bufnr)
+            end
+
+            if find(ignoreFormatter, client.name) then
+                client.server_capabilities.documentFormattingProvider = false
+                client.server_capabilities.documentRangeFormattingProvider = false
             end
 
             if fmt then

@@ -13,6 +13,7 @@ local cfg = {
         dotfiles = true
     },
     git = {
+        ignore = false,
         show_on_dirs = true
     },
     view = {

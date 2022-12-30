@@ -28,7 +28,7 @@ local icons = {
 }
 
 local function generate_config(cmp)
-    local sok, snippy = pcall(require, 'snippy')
+    local snippy = require('snippy')
 
     local config = {
         enabled = function()
@@ -93,7 +93,8 @@ local function generate_config(cmp)
                     buffer   = "[ BUFFER ]",
                     path     = "[ PATH ]",
                     nvim_lua = "[ VIM ]",
-                    crates   = "[ CRATES ]"
+                    crates   = "[ CRATES ]",
+                    cmdline  = "[ CMD ]"
                 })[entry.source.name] .. " "
 
                 return kind
@@ -101,11 +102,9 @@ local function generate_config(cmp)
         },
     }
 
-    if sok then
-        config.snippet = {
-            expand = function(args) snippy.expand_snippet(args.body) end
-        }
-    end
+    config.snippet = {
+        expand = function(args) snippy.expand_snippet(args.body) end
+    }
 
     return config
 end
@@ -124,14 +123,47 @@ local function event_setup(cmp)
 end
 
 function M.setup()
-    local ok, cmp = pcall(require, 'cmp')
-    if not ok then
-        return false
-    end
-    local cfg = generate_config(cmp)
-    event_setup(cmp)
+    local cmp = require('cmp')
 
-    cmp.setup(cfg)
+    event_setup(cmp)
+    cmp.setup(generate_config(cmp))
+
+    -- cmp.setup.cmdline(':', {
+    --     mapping = cmp.mapping.preset.cmdline(),
+    --     sources = cmp.config.sources({ { name = 'path' } }, { {
+    --         name = 'cmdline',
+    --         option = {
+    --             ignore_cmds = { 'Man', '!' }
+    --         }
+    --     } })
+    -- })
+
+    cmp.setup.cmdline('?', {
+        enabled = true,
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = { { name = 'buffer' } }
+    })
+
+    cmp.setup.cmdline('/', {
+        enabled = true,
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = { { name = 'buffer' } }
+    })
+
+    cmp.setup.cmdline(':', {
+        enabled = true,
+        complete = { autocomplete = true },
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = cmp.config.sources(
+            { { name = 'path' } },
+            { { name = 'cmdline',
+                option = {
+                    ignore_cmds = { 'Man', '!' }
+                }
+            } }
+        )
+    })
+
     return true
 end
 
