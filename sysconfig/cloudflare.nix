@@ -1,17 +1,21 @@
+# This config is taken from the following merge request
+# https://github.com/NixOS/nixpkgs/pull/168092/files
+#
+# Credits to @WolfangAukang
+
 { config, lib, pkgs, ... }:
 
 with lib;
 
-let
-  cfg = config.services.cloudflare-warp;
+let cfg = config.services.cloudflare-warp;
 
-in
-{
+in {
   meta.maintainers = with maintainers; [ wolfangaukang ];
 
   options = {
     services.cloudflare-warp = {
-      enable = mkEnableOption (lib.mdDoc "cloudflare-warp, a service that replaces the connection between your device and the Internet with a modern, optimized, protocol");
+      enable = mkEnableOption (lib.mdDoc
+        "cloudflare-warp, a service that replaces the connection between your device and the Internet with a modern, optimized, protocol");
 
       package = mkOption {
         type = types.package;
@@ -23,7 +27,8 @@ in
       user = mkOption {
         type = types.str;
         default = "warp";
-        description = lib.mdDoc "User account under which Cloudflare Warp runs.";
+        description =
+          lib.mdDoc "User account under which Cloudflare Warp runs.";
       };
 
       group = mkOption {
@@ -65,9 +70,8 @@ in
       certificateFiles = [ cfg.certificate ];
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedUDPPorts = [ cfg.udpPort ];
-    };
+    networking.firewall =
+      mkIf cfg.openFirewall { allowedUDPPorts = [ cfg.udpPort ]; };
 
     users.users = mkIf (cfg.user == "warp") {
       warp = {
@@ -77,9 +81,7 @@ in
         home = "/var/lib/cloudflare-warp";
       };
     };
-    users.groups = mkIf (cfg.group == "warp") {
-      warp = { };
-    };
+    users.groups = mkIf (cfg.group == "warp") { warp = { }; };
 
     systemd = {
       packages = [ cfg.package ];
