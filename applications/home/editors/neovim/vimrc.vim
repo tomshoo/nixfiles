@@ -24,4 +24,16 @@ let &t_ZR="\e[23m"
 let g:undotree_WindowLayout = 2
 
 autocmd! FileType toggleterm set colorcolumn=
-autocmd! CursorHold,CursorHoldI * TSDisable rainbow | TSEnable rainbow " 'fixes' a bug with `nvim-ts-rainbow
+autocmd! CursorHold * TSDisable rainbow | TSEnable rainbow " 'fixes' a bug with `nvim-ts-rainbow
+
+augroup NumberToggle
+    autocmd!
+    autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu | endif
+    autocmd BufLeave,FocusLost,InsertEnter,WinLeave * if &number | set nornu | endif
+augroup END
+
+augroup SetCursorline
+    autocmd!
+    autocmd InsertEnter,BufLeave,WinLeave * if &cursorline | set nocursorline | endif
+    autocmd InsertLeave,BufEnter,WinEnter * set cursorline
+augroup END

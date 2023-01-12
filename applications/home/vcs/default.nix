@@ -1,4 +1,5 @@
 { pkgs, ... }: {
+  imports = [ ./glab.nix ];
   programs.gh = {
     enable = true;
     enableGitCredentialHelper = true;
@@ -14,8 +15,8 @@
         "https://github.com/" = { insteadOf = [ "gh:" "github:" ]; };
         "https://gitlab.com/" = { insteadOf = [ "gl:" "gitlab:" ]; };
       };
-      credential."https://gitlab.com".helper =
-        "${pkgs.glab}/bin/glab auth git-credential";
+      # credential."https://gitlab.com".helper =
+      #   "${pkgs.glab}/bin/glab auth git-credential";
     };
   };
 }

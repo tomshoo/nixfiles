@@ -6,6 +6,7 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ./nvidia.nix
     ./security.nix
     ./cloudflare.nix
     ./flatpaks.nix
@@ -39,6 +40,7 @@
   };
 
   environment.variables = { NIXPKGS_ALLOW_UNFREE = "1"; };
+
   i18n = {
     defaultLocale = "en_US.UTF-8";
     extraLocaleSettings = {
@@ -86,9 +88,7 @@
 
   # Configure fonts
   fonts = {
-    fonts = # Enable fonts
-      (with pkgs; [ nerdfonts ])
-      ++ (with config.nur.repos; [ rewine.ttf-ms-win10 ]);
+    fonts = [ pkgs.nerdfonts config.nur.repos.rewine.ttf-ms-win10 ];
     fontDir.enable = true;
     enableDefaultFonts = true;
     fontconfig.defaultFonts.monospace = [ "RobotoMono Nerd Font" ];
@@ -111,6 +111,15 @@
     packages = with pkgs; [ firefox ];
     shell = pkgs.zsh;
   };
+
+  environment.systemPackages = with pkgs; [
+    vim
+    wget
+    nix-index
+    ntfs3g
+    cloudflare-warp
+    lm_sensors
+  ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

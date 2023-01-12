@@ -3,7 +3,6 @@ let inherit (opts) lib username;
 in {
   hyprland = lib.nixosSystem {
     modules = [
-
       opts.hyprland.nixosModules.default
 
       nur.nixosModules.nur
@@ -13,7 +12,7 @@ in {
       home-manager.nixosModules.home-manager
       {
         home-manager = {
-          extraSpecialArgs = { inherit (opts) doom-emacs; };
+          extraSpecialArgs = { inherit (opts) username doom-emacs; };
           useGlobalPkgs = true;
           useUserPackages = true;
           users.${username}.imports = [
@@ -39,7 +38,7 @@ in {
       home-manager.nixosModules.home-manager
       {
         home-manager = {
-          extraSpecialArgs = { inherit (opts) doom-emacs; };
+          extraSpecialArgs = { inherit (opts) username doom-emacs devenv; };
           useGlobalPkgs = true;
           useUserPackages = true;
           users.${username}.imports = [ ../home/${username} ];
@@ -62,7 +61,7 @@ in {
       home-manager.nixosModules.home-manager
       {
         home-manager = {
-          extraSpecialArgs = { inherit (opts) doom-emacs; };
+          extraSpecialArgs = { inherit (opts) username doom-emacs; };
           useGlobalPkgs = true;
           useUserPackages = true;
           users.${username}.imports = [ ../home/${username} ];

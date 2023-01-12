@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, ... }@opts:
 
 {
   imports = [
@@ -30,7 +30,7 @@
     neovide
     obsidian
     tilix
-    go
+    # go
     exa
     unzip
     fzf
@@ -38,10 +38,10 @@
     gcc
     adw-gtk3
     libreoffice-fresh
-    sqlite
+    # sqlite
     qbittorrent
-    glab
     postman
+    opts.devenv.packages.x86_64-linux.devenv
 
     wl-clipboard
 

@@ -1,13 +1,11 @@
-{ pkgs, lib, ... }:
-let plugins = import ./plugins.nix { inherit pkgs lib; };
-in {
+{ pkgs, lib, ... }: {
+  imports = [ ./plugins.nix ];
+
   programs.neovim = {
     package = pkgs.neovim-unwrapped;
     withNodeJs = true;
     withPython3 = true;
     enable = true;
-
-    inherit plugins;
 
     extraPackages = with pkgs;
       [
@@ -15,6 +13,8 @@ in {
         nil
         sumneko-lua-language-server
         rust-analyzer
+        gopls
+        haskell-language-server
         python310Packages.jedi-language-server
 
         # Null-ls
@@ -25,6 +25,7 @@ in {
         #Utils
         ripgrep
         fd
+        silicon
       ] ++ (with nodePackages_latest; [
         # Node based language servers
         vim-language-server
@@ -33,13 +34,14 @@ in {
 
         # Null ls
         prettier
+        eslint
+        eslint_d
 
         # Extra dependencies
         typescript
       ]);
   };
 
-  # xdg.configFile."nvim".source = ./config;
   xdg.configFile = {
     "nvim/init.lua".text = ''
       _G.typescript = {

@@ -31,6 +31,9 @@ local function generate_config(cmp)
     local snippy = require('snippy')
 
     local config = {
+        view = {
+            entries = { name = 'custom', selection_order = 'near_cursor' }
+        },
         enabled = function()
             local context = require("cmp.config.context")
             if vim.api.nvim_get_mode().mode == 'c' then
@@ -41,8 +44,8 @@ local function generate_config(cmp)
             end
         end,
         mapping = cmp.mapping.preset.insert({
-            ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-            ['<C-f>'] = cmp.mapping.scroll_docs(4),
+            ['<C-k>'] = cmp.mapping.scroll_docs(-2),
+            ['<C-j>'] = cmp.mapping.scroll_docs(2),
             ['<C-Space>'] = cmp.mapping.complete(),
             ['<C-e>'] = cmp.mapping.abort(),
             ['<CR>'] = cmp.mapping.confirm({ select = true }),
@@ -127,16 +130,6 @@ function M.setup()
 
     event_setup(cmp)
     cmp.setup(generate_config(cmp))
-
-    -- cmp.setup.cmdline(':', {
-    --     mapping = cmp.mapping.preset.cmdline(),
-    --     sources = cmp.config.sources({ { name = 'path' } }, { {
-    --         name = 'cmdline',
-    --         option = {
-    --             ignore_cmds = { 'Man', '!' }
-    --         }
-    --     } })
-    -- })
 
     cmp.setup.cmdline('?', {
         enabled = true,

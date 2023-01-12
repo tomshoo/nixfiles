@@ -15,8 +15,8 @@
   programs.bash = {
     enable = true;
     bashrcExtra = ''
-      ${builtins.readFile ./common.sh}
       ${builtins.readFile ./bash/extra.bash}
+      ${builtins.readFile ./common.sh}
     '';
 
     shellAliases = {
@@ -53,8 +53,8 @@
     };
 
     initExtra = ''
-      ${builtins.readFile ./common.sh}
       ${builtins.readFile ./zsh/extra.zsh}
+      ${builtins.readFile ./common.sh}
     '';
   };
 }

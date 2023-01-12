@@ -3,7 +3,10 @@ vim.cmd.colorscheme "onedark"
 require("utils")
 require("maps")
 require("config")
+require("lsp")
 require("aucmd")
+
+vim.opt.number = true
 
 vim.opt.undofile   = true
 vim.opt.wrap       = false
@@ -28,7 +31,7 @@ vim.opt.ruler = true
 vim.opt.list  = true
 
 vim.opt.title       = true
-vim.opt.showmode    = true
+vim.opt.showmode    = false
 vim.opt.tabstop     = 4
 vim.opt.smartindent = true
 vim.opt.softtabstop = 4
@@ -43,8 +46,7 @@ vim.opt.colorcolumn = "80"
 vim.g.colorizer_startup = 1
 
 -- For Conceal markers
-if vim.fn.has('conceal')
-then
+if vim.fn.has('conceal') then
     vim.opt.conceallevel  = 2
     vim.opt.concealcursor = "nvc"
 end

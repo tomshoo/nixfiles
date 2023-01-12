@@ -1,7 +1,12 @@
-{ config, lib, pkgs, ... }:
-let packages = import ../../sysconfig/packages.nix { inherit pkgs; };
-in {
-  programs.hyprland.enable = true;
+{ config, lib, pkgs, ... }: {
+  programs.hyprland = {
+    enable = true;
+    xwayland = {
+      enable = true;
+      hidipi = true;
+    };
+    nvidiaPatches = true;
+  };
   services.dbus.enable = true;
 
   environment.variables = {
@@ -16,6 +21,5 @@ in {
     fi
   '';
 
-  environment.systemPackages = packages
-    ++ (with pkgs; [ wbg swaylock foot slurp ]);
+  environment.systemPackages = with pkgs; [ wbg swaylock foot slurp ];
 }

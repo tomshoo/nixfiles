@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 load() {
     package=$1
@@ -21,4 +21,8 @@ within() {
         echo "cannot create a nix-shell"
         return 1
     fi
+}
+
+youtube-dl() {
+    load python310Packages.youtube-dl "youtube-dl $*"
 }

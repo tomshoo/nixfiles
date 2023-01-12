@@ -1,6 +1,4 @@
-local M = {}
-
-function M.setup(client, bufnr)
+return function (client, bufnr)
     if client.server_capabilities.documentHighlightProvider then
         vim.cmd [[
             hi! LspReferenceRead cterm=bold ctermbg=red guibg=#2c3043
@@ -24,5 +22,3 @@ function M.setup(client, bufnr)
         })
     end
 end
-
-return M
