@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+function tsman() {
+    local session
+
+    if [ "$#" -gt 1 ]; then
+        echo '[ERROR]: usage: tsman [session name]?' >&2
+        return 1
+    fi
+
+    if [ "$#" -eq 0 ]; then
+        session=$(basename $PWD)
+    elif tmux has-session -t "$1" &> /dev/null; then
+        session=$1
+    elif dirname="$(zoxide query $1 2> /dev/null)"; then
+        pushd "$dirname"
+        session="$1"
+    else
+        echo '[ERROR]: could not register a session with the given arguments' >&2
+        return 1
+    fi
+
+    if [ -n "$TMUX" ]; then
+        if tmux has-session -t "$session" &> /dev/null; then
+            tmux switch-client -t "$session"
+        else
+            tmux new-session -d -s "$session"
+            tmux switch-client -t "$session"
+        fi
+    else
+        if tmux has-session -t "$session" &> /dev/null; then
+            tmux attach-session -t "$session"
+        else
+            tmux new-session -s "$session"
+        fi
+    fi
+
+    popd &> /dev/null || return 0
+}
+

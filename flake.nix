@@ -1,38 +1,35 @@
 {
-  description = "Configuration flake for building my NixOS configuration";
+  description = "Configuration flake for the system";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
     nur.url = "github:nix-community/NUR";
-    doom-emacs.url = "github:/nix-community/nix-doom-emacs";
-    devenv.url = "github:cachix/devenv/v0.5";
+    # wolfangaukang.url = "git+https://codeberg.org/wolfangaukang/nix-agordoj?ref=main";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
     home-manager = {
-      url = "github:/nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    hyprland = {
-      url = "github:vaxerski/Hyprland";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, ... }@inputs:
-    let
-      username = "tomshoo";
-      userdesc = "Shubhanshu Tomar";
-      system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-      };
-      lib = nixpkgs.lib;
-    in {
-      nixosConfigurations = import ./hosts {
-        inherit system pkgs username lib userdesc;
-        inherit (inputs) nur home-manager devenv; # Providers
-        inherit (inputs) doom-emacs hyprland; # Overlays/Extensions
-      };
+  outputs = { self, nixpkgs, nixpkgs-unstable, ... } @ inputs: 
+    let system = "x86_64-linux";
+        pkgconfig = {
+          config.allowUnfree = true;
+          localSystem = {
+            inherit system;
+          };
+        };
+
+        pkgs = import nixpkgs (pkgconfig);
+        pkgs-unstable = import nixpkgs-unstable (pkgconfig);
+
+        inherit (nixpkgs) lib;
+  in {
+    nixosConfigurations = import ./profiles {
+      inherit lib pkgs pkgs-unstable system;
+      inherit (inputs) home-manager nur ;
     };
+  };
 }
