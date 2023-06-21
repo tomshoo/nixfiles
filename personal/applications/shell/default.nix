@@ -1,4 +1,4 @@
-{ ... }: {
+{ config, ... }: {
   programs.starship = {
     enable = true;
     enableBashIntegration = true;
@@ -66,11 +66,16 @@
       '';
   };
 
-  xdg.configFile = {
-    "zsh/functions".source = ./zsh/functions;
-  };
+  home.shellAliases =
+    { edit="${config.home.sessionVariables.EDITOR}";
+      open="xdg-open";
+    };
 
-  xdg.configFile = {
-    "bash/functions".source = ./bash/functions;
-  };
+  xdg.configFile =
+    { "zsh/functions".source = ./zsh/functions;
+    };
+
+  xdg.configFile =
+    { "bash/functions".source = ./bash/functions;
+    };
 }

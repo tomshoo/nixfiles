@@ -1,24 +1,32 @@
-{ pkgs,
+{ lib,
+  pkgs,
   pkgs-unstable,
-  lib,
   home-manager,
+  wolfangaukang,
   nur,
   ...
 } @ opts : let
-  username = "tomshoo";
+  username    = "tomshoo";
   description = "Shubhanshu Tomar";
 in lib.nixosSystem {
   modules =
     [ nur.nixosModules.nur
-      ../../system
+      ./system/configuration.nix
       ./desktop.nix
 
+      wolfangaukang.nixosModules.cloudflare-warp
       home-manager.nixosModules.home-manager {
         home-manager = {
-          extraSpecialArgs = { inherit username pkgs-unstable; };
+          extraSpecialArgs =
+            { inherit username pkgs-unstable;
+            };
+
           useGlobalPkgs = true;
           useUserPackages = true;
-          users.${username}.imports = [ ../../personal ];
+
+          users.${username}.imports =
+            [ ../../personal
+            ];
         };
       }
     ];

@@ -25,7 +25,7 @@ require('lualine').setup {
         lualine_b = { 'branch', 'diff', 'diagnostics' },
         lualine_c = { 'filename', components.lsp },
         lualine_x = { 'encoding', components.fileformat, 'filetype' },
-        lualine_y = { 'progress', components.mixed_indent },
+        lualine_y = { 'progress', components.mixed_indent, components.trailing_space },
         lualine_z = { 'location' }
     },
     inactive_sections = {

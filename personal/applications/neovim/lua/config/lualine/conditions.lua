@@ -16,21 +16,7 @@ conditions.check_git_workspace = function()
 end
 
 conditions.lsp_is_active = function()
-    local buf_ft  = vim.api.nvim_buf_get_option(0, 'filetype')
-    local clients = vim.lsp.get_active_clients()
-
-    if next(clients) == nil then
-        return false
-    end
-
-    for _, client in ipairs(clients) do
-        local filetypes = client.config.filetypes
-        if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
-            return true
-        end
-    end
-
-    return false
+    return #(vim.lsp.buf_get_clients()) ~= 0
 end
 
 return conditions

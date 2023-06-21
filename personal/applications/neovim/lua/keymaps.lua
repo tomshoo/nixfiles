@@ -13,7 +13,7 @@ map("n", "<Space>", "<Nop>")
 vim.g.mapleader = " "
 
 map('n', '<esc>', '<cmd>noh<cr>', { remap = true })
-map('n', 'U', vim.cmd.undo, { remap = true })
+map('n', 'U', vim.cmd.redo, { remap = true })
 map('n', 'gn', vim.cmd.BufferNext, { desc = "Go to next buffer" })
 map('n', 'gp', vim.cmd.BufferPrevious, { desc = "Go to previous buffer" })
 

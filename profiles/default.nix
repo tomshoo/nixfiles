@@ -3,6 +3,7 @@
   home-manager,
   nur,
   pkgs-unstable,
+  wolfangaukang,
   ...
 } @ opts: rec {
   doomsday = import ./doomsday {
@@ -10,6 +11,7 @@
             pkgs
             pkgs-unstable
             home-manager
+            wolfangaukang
             nur;
 
     inherit (opts) system;

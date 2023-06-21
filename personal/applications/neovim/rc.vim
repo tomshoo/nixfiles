@@ -5,6 +5,9 @@ function! s:alias(from, to)
 endfunction
 
 call s:alias('bc', 'Bclose')
+call s:alias('W',  'write')
+call s:alias('Q',  'quit')
+call s:alias('Wq', 'wq')
 
 set number
 set undofile
@@ -38,7 +41,7 @@ if has('termguicolors')
 endif
 
 autocmd! BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != 'i' | set rnu | endif
-autocmd! BufLeave,FocusLost,InsertEnter,WinLeave * if &nu | set nornu | endif
+autocmd! BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu | set nornu | endif
 
 let g:cursorhold_updatetime=100
 

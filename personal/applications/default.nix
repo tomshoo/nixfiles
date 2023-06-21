@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ pkgs-unstable, ... }: {
   imports =
     [ ./shell
       ./neovim
@@ -29,7 +29,7 @@
     userName = "Shubhanshu Tomar";
     userEmail = "tomarshubhanshu@protonmail.ch";
     extraConfig = {
-      credential."https://gitlab.com".helper = "${pkgs.glab}/bin/glab auth git-credential";
+      credential."https://gitlab.com".helper = "${pkgs-unstable.glab}/bin/glab auth git-credential";
       url = {
         "https://github.com/".insteadOf = "gh:";
         "https://gitlab.com/".insteadOf = "gl:";

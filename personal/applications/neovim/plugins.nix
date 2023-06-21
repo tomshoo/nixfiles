@@ -1,10 +1,12 @@
 { pkgs, ... }: {
-  programs.neovim.plugins = (with pkgs.vimPlugins;
+  programs.neovim.plugins = (with pkgs.vimPlugins; 
     [ FixCursorHold-nvim
       nvim-hlslens
       tabular
       bclose-vim
       vim-tmux-navigator
+      wilder-nvim
+      which-key-nvim
 
       undotree
       neogit

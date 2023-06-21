@@ -1,27 +1,10 @@
-{ config, pkgs, ... } : {
+{ pkgs, ... } : {
   imports =
-    [ ./hardware-configuration.nix
-      ./sudo.nix
+    [ ./sudo.nix
       ./flatpaks.nix
       ./nvidia.nix
-      ./users.nix
     ];
 
-  boot.loader.efi = {
-    efiSysMountPoint = "/boot/efi";
-    canTouchEfiVariables = true;
-  };
-
-  boot.loader.grub = {
-    enable = true;
-    devices = [ "nodev" ];
-    efiSupport = true;
-    useOSProber = true;
-    configurationLimit = 5;
-    gfxmodeEfi = "1920x1080";
-  };
-
-  networking.hostName = "doomsday";
   networking.networkmanager.enable = true;
   networking.nameservers = [ "1.1.1.1" "1.1.0.1" ];
 
@@ -56,31 +39,6 @@
     pulse.enable = true;
   };
 
-  fonts = {
-    fonts = [ pkgs.nerdfonts config.nur.repos.rewine.ttf-ms-win10 ];
-    fontDir.enable = true;
-    enableDefaultFonts = true;
-    fontconfig.defaultFonts.monospace = [ "RobotoMono Nerd Font" ];
-  };
-
-  environment = {
-    shells = with pkgs; [ zsh ];
-
-    variables = {
-      NIXPKGS_ALLOW_UNFREE = "1";
-    };
-
-    systemPackages = with pkgs; 
-      [ neovim
-        wget
-        nix-index
-        ntfs3g
-        lm_sensors
-      ];
-  };
-
-  programs.zsh.enable = true;
-
   nix = {
     settings = {
       auto-optimise-store = true;
@@ -97,8 +55,6 @@
     };
     package = pkgs.nixFlakes;
   };
-
-  virtualisation.docker.enable = true;
 
   system.autoUpgrade = {
     allowReboot = true;

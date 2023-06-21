@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
     nur.url = "github:nix-community/NUR";
-    # wolfangaukang.url = "git+https://codeberg.org/wolfangaukang/nix-agordoj?ref=main";
+    wolfangaukang.url = "git+https://codeberg.org/wolfangaukang/nix-agordoj?ref=main";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
     home-manager = {
@@ -13,7 +13,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, ... } @ inputs: 
+  outputs = { self, nixpkgs, nixpkgs-unstable, ... } @ inputs:
     let system = "x86_64-linux";
         pkgconfig = {
           config.allowUnfree = true;
@@ -29,7 +29,7 @@
   in {
     nixosConfigurations = import ./profiles {
       inherit lib pkgs pkgs-unstable system;
-      inherit (inputs) home-manager nur ;
+      inherit (inputs) home-manager nur wolfangaukang;
     };
   };
 }

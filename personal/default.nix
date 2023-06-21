@@ -1,23 +1,28 @@
 { pkgs,
   pkgs-unstable,
+  config,
   ...
-} @ opts: {
+} @ opts: let
+  inherit (opts) username;
+  datadir = config.xdg.dataHome;
+in {
   imports = [ ./applications ];
 
-  home.username = opts.username;
-  home.homeDirectory = "/home/${opts.username}";
+  home.username = username;
+  home.homeDirectory = "/home/${username}";
 
-  home.sessionVariables =
-    { TERM = "xterm-256color";
-      WINIT_UNIX_BACKEND = "x11";
-      MOZ_ENABLE_WAYLAND = "1";
-      LD_LIBRARY_PATH = "${pkgs.zlib}/lib:${pkgs.sqlite.out}/lib:$LD_LIBRARY_PATH";
-    };
+  home.sessionVariables = {
+    TERM               = "xterm-256color";
+    WINIT_UNIX_BACKEND = "x11";
+    MOZ_ENABLE_WAYLAND = "1";
+    LD_LIBRARY_PATH    = "${pkgs.zlib}/lib:${pkgs.sqlite.out}/lib:$LD_LIBRARY_PATH";
+    EDITOR             = "nvim";
+  };
 
-  home.file.".local/share/flatpak/overrides/global".text =
+  home.file."${datadir}/flatpak/overrides/global".text =
     ''
     [Context]
-    filesystem=~/.local/share/fonts:ro;xdg-config/gtk-3.0;xdg-config/gtk-40.
+    filesystem=${datadir}/fonts:ro;xdg-config/gtk-3.0;xdg-config/gtk-40.
     '';
 
   home.packages = with pkgs;

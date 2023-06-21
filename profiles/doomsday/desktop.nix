@@ -5,7 +5,7 @@ let extensions = with pkgs.gnomeExtensions;
     blur-my-shell
     caffeine
     clipboard-indicator
-    dash-to-dock
+    dotspaces
     just-another-search-bar
     maximize-to-empty-workspace
     rounded-window-corners
@@ -18,7 +18,8 @@ in {
     desktopManager.gnome.enable = true;
   };
 
-  services.udev.packages = with pkgs.gnome; [ gnome-settings-daemon ];
+  services.udev.packages = with pkgs.gnome;
+    [ gnome-settings-daemon ];
 
   environment.gnome.excludePackages = with pkgs; [
     gnome-console
@@ -26,11 +27,12 @@ in {
   ];
 
   environment.systemPackages = with pkgs;
-  [ blackbox-terminal
-    amberol
-    endeavour
-    gnome.gnome-tweaks
-  ] ++ extensions;
+    [ blackbox-terminal
+      amberol
+      endeavour
+      gnome.gnome-tweaks
+    ] ++ extensions;
 
+  xdg.portal.enable = true;
   programs.gnome-terminal.enable = true;
 }

@@ -5,6 +5,7 @@
     enable = true;
     withNodeJs = true;
     package = pkgs.neovim-unwrapped;
+    defaultEditor = true;
 
     extraPackages = with pkgs;
       [ rust-analyzer

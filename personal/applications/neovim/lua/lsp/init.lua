@@ -23,8 +23,10 @@ servers.lua_ls = {
     }
 }
 
-servers.clangd = {}
-servers.nil_ls = {}
+
+servers.clangd               = {}
+servers.nil_ls               = {}
+servers.jedi_language_server = {}
 
 for server, config in pairs(servers) do
     config.capabilities = require('cmp_nvim_lsp').default_capabilities(
@@ -52,7 +54,7 @@ vim.api.nvim_create_autocmd({ "LspAttach" }, {
 
         if client.server_capabilities.documentFormattingProvider then
             vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-                group = vim.api.nvim_create_augroup('buf-format', { clear = true }),
+                group = vim.api.nvim_create_augroup('autoformat', { clear = true }),
                 callback = function()
                     vim.lsp.buf.format({ async = vim.fn.has('g:async_formatting') == 1 or false })
                 end

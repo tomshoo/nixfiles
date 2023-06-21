@@ -66,4 +66,15 @@ components.mixed_indent = {
     cond = conditions.hide_in_width
 }
 
+components.trailing_space = {
+    function()
+        local space = vim.fn.search([[\s\+$]], 'nwc')
+        return (vim.fn.mode() ~= 'i'
+                and space ~= 0
+                and ' ' .. space)
+            or ''
+    end,
+    cond = conditions.hide_in_width
+}
+
 return components
