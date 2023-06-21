@@ -1,7 +1,17 @@
 { config,
   pkgs,
   ...
-} :
+} : let
+  nerdfonts = pkgs.nerdfonts.override
+    { fonts =
+        [ "RobotoMono"
+          "JetBrainsMono"
+          "Hack"
+          "FiraCode"
+        ];
+    };
+
+in
 { imports =
     [ ../../../system
       ./hardware-configuration.nix
@@ -11,7 +21,7 @@
   networking.hostName = "doomsday";
 
   fonts =
-    { fonts = [ pkgs.nerdfonts config.nur.repos.rewine.ttf-ms-win10 ];
+    { fonts = [ nerdfonts config.nur.repos.rewine.ttf-ms-win10 ];
       fontDir.enable = true;
       enableDefaultFonts = true;
       fontconfig.defaultFonts.monospace = [ "RobotoMono Nerd Font" ];
