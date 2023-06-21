@@ -1,5 +1,9 @@
-{ pkgs, username, description, ... } : {
-  users.users."${username}" = {
+{ pkgs,
+  username,
+  description,
+  ...
+} :
+{ users.users."${username}" = {
     inherit description;
 
     isNormalUser = true;
@@ -10,6 +14,7 @@
         "video"
         "input"
         "power"
+        "docker"
       ];
 
     packages = with pkgs;
