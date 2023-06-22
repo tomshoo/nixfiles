@@ -2,7 +2,7 @@
   imports =
     [ ./shell
       ./neovim
-      ./tmux.nix
+      ./tmux
     ];
 
   programs.direnv = {
