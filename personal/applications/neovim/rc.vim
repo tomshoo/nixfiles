@@ -29,7 +29,7 @@ set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set scrolloff=5
-set cmdheight=0
+set mouse=
 
 if has('conceal')
   set conceallevel=2
@@ -40,8 +40,11 @@ if has('termguicolors')
   set termguicolors
 endif
 
-autocmd! BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != 'i' | set rnu | endif
-autocmd! BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu | set nornu | endif
+augroup Numberlines
+  autocmd!
+  autocmd! BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != 'i' | set rnu | endif
+  autocmd! BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu | set nornu | endif
+augroup END
 
 let g:cursorhold_updatetime=100
 
