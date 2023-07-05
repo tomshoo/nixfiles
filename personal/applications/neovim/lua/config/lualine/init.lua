@@ -21,10 +21,10 @@ require('lualine').setup {
         component_separators = { left = '|', right = '|' },
     },
     sections = {
-        lualine_a = { 'mode' },
-        lualine_b = { 'branch', 'diff', 'diagnostics' },
-        lualine_c = { 'filename', components.lsp },
-        lualine_x = { 'encoding', components.fileformat, 'filetype' },
+        lualine_a = { components.window, 'mode' },
+        lualine_b = { 'branch', components.diff, 'diagnostics' },
+        lualine_c = { components.lsp, '%=', 'filename' },
+        lualine_x = { 'encoding', components.fileformat, components.filetype },
         lualine_y = { 'progress', components.mixed_indent, components.trailing_space },
         lualine_z = { 'location' }
     },

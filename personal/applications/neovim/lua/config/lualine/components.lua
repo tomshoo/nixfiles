@@ -1,6 +1,18 @@
 local conditions = require('config.lualine.conditions')
 local components = {}
 
+components.diff = {
+    'diff',
+    source = function()
+        local diff = vim.b.gitsigns_status_dict
+        return (diff and {
+            added    = diff.added,
+            removed  = diff.removed,
+            modified = diff.changed,
+        }) or nil
+    end
+}
+
 components.lsp = {
     function()
         local names = {}
@@ -58,23 +70,34 @@ components.mixed_indent = {
         }).total
 
         if space_indent_cnt > tab_indent_cnt then
-            return vim.fn.mode() ~= 'i' and '' .. tab_indent or ''
+            return '' .. tab_indent
         else
-            return vim.fn.mode() ~= 'i' and '' .. space_indent or ''
+            return '' .. space_indent
         end
     end,
-    cond = conditions.hide_in_width
+    cond = function()
+        return conditions.hide_in_width() and conditions.mode_isnt_insert()
+    end
 }
 
 components.trailing_space = {
     function()
         local space = vim.fn.search([[\s\+$]], 'nwc')
-        return (vim.fn.mode() ~= 'i'
-                and space ~= 0
-                and ' ' .. space)
+        return (space ~= 0 and ' ' .. space)
             or ''
     end,
-    cond = conditions.hide_in_width
+    cond = function()
+        return conditions.hide_in_width() and conditions.mode_isnt_insert()
+    end
 }
+
+components.filetype = {
+    'filetype',
+    icon = { align = 'right' },
+}
+
+components.window = function()
+    return vim.api.nvim_win_get_number(0)
+end
 
 return components

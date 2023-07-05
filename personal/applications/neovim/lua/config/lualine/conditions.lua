@@ -19,4 +19,8 @@ conditions.lsp_is_active = function()
     return #(vim.lsp.buf_get_clients()) ~= 0
 end
 
+conditions.mode_isnt_insert = function()
+    return vim.fn.mode() ~= 'i'
+end
+
 return conditions
