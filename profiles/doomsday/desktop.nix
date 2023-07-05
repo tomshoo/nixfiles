@@ -12,15 +12,19 @@
       maximize-to-empty-workspace
       rounded-window-corners
       disable-menu-switching
-      move-clock
+      task-widget
+      gesture-improvements
     ];
 in
 { services.xserver =
     { enable = true;
       layout = "us";
-      displayManager.gdm.enable = true;
       displayManager.defaultSession = "gnome";
       desktopManager.gnome.enable = true;
+      displayManager.gdm =
+        { enable = true;
+          wayland = true;
+        };
     };
 
   services.udev.packages = with pkgs.gnome;
