@@ -6,16 +6,16 @@
   wolfangaukang,
   ...
 } @ opts: rec {
-  doomsday = import ./doomsday {
-    inherit lib
-            pkgs
-            pkgs-unstable
-            home-manager
-            wolfangaukang
-            nur;
+  doomsday = import ./doomsday
+    { inherit lib
+              pkgs
+              pkgs-unstable
+              home-manager
+              wolfangaukang
+              nur;
 
-    inherit (opts) system;
-  };
+      inherit (opts) system;
+    };
 
   default = doomsday;
 }
