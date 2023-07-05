@@ -1,35 +1,51 @@
-{ pkgs, lib, ... }: {
-  imports = [ ./plugins.nix ];
+{ pkgs,
+  pkgs-unstable,
+  ...
+}: let
+  tsserver   = pkgs.nodePackages_latest.typescript-language-server;
+  typescript = pkgs.nodePackages_latest.typescript;
+in
+{ imports = [ ./plugins.nix ];
 
   programs.neovim = {
-    enable = true;
-    withNodeJs = true;
-    package = pkgs.neovim-unwrapped;
+    enable        = true;
+    withNodeJs    = true;
+    withPython3   = true;
+    package       = pkgs.neovim-unwrapped;
     defaultEditor = true;
 
+    viAlias      = true;
+    vimAlias     = true;
+    vimdiffAlias = true;
+
+    extraConfig    = builtins.readFile ./rc.vim;
+    extraLuaConfig =
+      ''
+      _G.typescript = {
+        tsserverPath = "${tsserver}/bin/typescript-language-server",
+        tslib        = "${typescript}/lib/node_modules/typescript/lib",
+      }
+
+      ${builtins.readFile ./init.lua}
+      '';
+
     extraPackages = with pkgs;
-      [ rust-analyzer
+      [ pkgs-unstable.rust-analyzer-unwrapped
         gopls
         python310Packages.jedi-language-server
+        python310Packages.pylint
         lua-language-server
         python310Packages.autopep8
         shellcheck
         nil
         silicon
+
+        tsserver
+        typescript
       ];
   };
 
   xdg.configFile = {
-    "nvim/init.lua".text = ''
-    _G.typescript = {
-      tsserverPath = "${pkgs.nodePackages_latest.typescript-language-server}/bin/typescript-language-server",
-      tstLib       = "${pkgs.nodePackages_latest.typescript}/lib/node_modules/typescript/lib",
-    }
-
-    ${builtins.readFile ./init.lua}
-    '';
-
-    "nvim/rc.vim".source   = ./rc.vim;
     "nvim/lua".source      = ./lua;
     "nvim/ftplugin".source = ./ftplugin;
   };
