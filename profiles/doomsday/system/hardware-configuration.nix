@@ -40,7 +40,7 @@
 
   fileSystems."/home" =
     { device = "/dev/disk/by-label/NIX_HOME";
-      fsType = "ext4";
+      fsType = "btrfs";
     };
 
   fileSystems."/nix" =
