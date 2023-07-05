@@ -1,11 +1,11 @@
-{ pkgs,
-  username,
+{ username,
   description,
   ...
 } :
 { users.users."${username}" = {
     inherit description;
 
+    initialPassword = "${username}";
     isNormalUser = true;
     extraGroups =
       [ "networkmanager"
@@ -16,10 +16,6 @@
         "power"
         "docker"
       ];
-
-    packages = with pkgs;
-      [ firefox
-        git
-      ];
+    packages = [];
   };
 }

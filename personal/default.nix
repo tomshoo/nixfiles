@@ -8,7 +8,7 @@
 in {
   imports = [ ./applications ];
 
-  home.username = username;
+  home.username      = username;
   home.homeDirectory = "/home/${username}";
 
   home.sessionVariables = {
@@ -17,6 +17,7 @@ in {
     MOZ_ENABLE_WAYLAND = "1";
     LD_LIBRARY_PATH    = "${pkgs.zlib}/lib:${pkgs.sqlite.out}/lib:$LD_LIBRARY_PATH";
     EDITOR             = "nvim";
+    MANPAGER           = "sh -c 'col -bx | bat -l man -p'";
   };
 
   home.file."${datadir}/flatpak/overrides/global".text =
@@ -38,9 +39,11 @@ in {
       fd
       pfetch
       pkgs-unstable.glab
+      firefox
+      git
     ];
 
-  services.lorri.enable = true;
+  services.lorri.enable        = true;
   programs.home-manager.enable = true;
 
   home.stateVersion = "23.05";
