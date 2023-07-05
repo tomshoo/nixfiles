@@ -11,20 +11,25 @@
     exec "$@"
     '';
 in {
-  environment.systemPackages = [ prime-offload ];
+  environment.systemPackages    = [ prime-offload ];
   services.xserver.videoDrivers = [ "nvidia" ];
 
-  hardware = {
-    opengl.enable = true;
-    nvidia = {
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
-      modesetting.enable = true;
-      prime = {
-        offload.enable = true;
-        intelBusId = "PCI:00:02:0";
-        nvidiaBusId = "PCI:01:00:0";
-      };
-      powerManagement.enable = true;
+  hardware =
+    { opengl =
+        { enable     = true;
+          driSupport = true;
+        };
+
+      nvidia =
+        { package                = config.boot.kernelPackages.nvidiaPackages.stable;
+          modesetting.enable     = true;
+          powerManagement.enable = true;
+
+          prime =
+            { offload.enable = true;
+              intelBusId     = "PCI:00:02:0";
+              nvidiaBusId    = "PCI:01:00:0";
+            };
+        };
     };
-  };
 }
