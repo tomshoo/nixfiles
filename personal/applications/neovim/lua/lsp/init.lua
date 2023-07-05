@@ -24,6 +24,11 @@ servers.lua_ls = {
 }
 
 
+servers.tsserver = {
+    command = { { typescript.tsserverPath, "--stdio" } }
+}
+
+
 servers.clangd               = {}
 servers.nil_ls               = {}
 servers.jedi_language_server = {}
@@ -40,6 +45,7 @@ for server, config in pairs(servers) do
 
     lspconfig[server].setup(config)
 end
+
 
 vim.api.nvim_create_autocmd({ "LspAttach" }, {
     group = vim.api.nvim_create_augroup('lspattach', { clear = true }),
