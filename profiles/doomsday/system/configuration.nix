@@ -9,7 +9,11 @@
 
 in
 { imports =
-    [ ../../../system
+    [ ../../../system/configuration.nix
+      ../../../system/sudo.nix
+      ../../../system/nvidia.nix
+      ../../../system/flatpaks.nix
+      ../../../system/virtualization.nix
       ./hardware-configuration.nix
       ./users.nix
     ];
@@ -38,11 +42,5 @@ in
         ];
 
       variables.NIXPKGS_ALLOW_UNFREE = "1";
-    };
-
-  virtualisation =
-    { docker.enable = true;
-      waydroid.enable = true;
-      lxd.enable = true;
     };
 }

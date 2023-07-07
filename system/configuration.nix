@@ -1,10 +1,4 @@
 { pkgs, ... } : {
-  imports =
-    [ ./sudo.nix
-      ./flatpaks.nix
-      ./nvidia.nix
-    ];
-
   networking.networkmanager.enable = true;
   networking.nameservers = [ "1.1.1.1" "1.1.0.1" ];
 
