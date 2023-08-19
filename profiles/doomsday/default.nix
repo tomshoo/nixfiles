@@ -2,8 +2,8 @@
   pkgs,
   pkgs-unstable,
   home-manager,
-  wolfangaukang,
   nur,
+  nixosModules,
   ...
 } @ opts : let
   username    = "tomshoo";
@@ -14,7 +14,7 @@ in lib.nixosSystem {
       ./system/configuration.nix
       ./desktop.nix
 
-      wolfangaukang.nixosModules.cloudflare-warp
+      nixosModules.cloudflare-warp
       home-manager.nixosModules.home-manager {
         home-manager = {
           extraSpecialArgs =

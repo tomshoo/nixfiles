@@ -1,29 +1,12 @@
 local conditions = require('config.lualine.conditions')
 local components = {}
 
-components.diff = {
-    'diff',
-    source = function()
-        local diff = vim.b.gitsigns_status_dict
-        return (diff and {
-            added    = diff.added,
-            removed  = diff.removed,
-            modified = diff.changed,
-        }) or nil
-    end
-}
-
 components.lsp = {
     function()
-        local names = {}
+        local names   = {}
+        local clients = vim.lsp.get_active_clients({ bufnr = vim.fn.bufnr() })
 
-        for _, client in ipairs(vim.lsp.get_active_clients {
-            bufnr = vim.fn.bufnr()
-        }) do
-            table.insert(
-                names,
-                string.len(client.name) <= 15 and client.name or "...")
-        end
+        for _, client in ipairs(clients) do table.insert(names, client.name) end
 
         return conditions.hide_in_width()
             and '[' .. table.concat(names, ':') .. ']'
@@ -36,7 +19,7 @@ components.lsp = {
 components.fileformat = {
     'fileformat',
     icons_enabled = false,
-    fmt = string.upper,
+    fmt           = string.upper,
 }
 
 components.mixed_indent = {
@@ -69,34 +52,27 @@ components.mixed_indent = {
             max_count = 1e3
         }).total
 
-        if space_indent_cnt > tab_indent_cnt then
-            return '' .. tab_indent
-        else
-            return '' .. space_indent
-        end
+        return (space_indent_cnt > tab_indent_cnt)
+            and ('MI:%d'):format(tab_indent)
+            or ('MI:%d'):format(space_indent)
     end,
-    cond = function()
-        return conditions.hide_in_width() and conditions.mode_isnt_insert()
-    end
+    cond = conditions.hide_in_width,
 }
 
 components.trailing_space = {
     function()
-        local space = vim.fn.search([[\s\+$]], 'nwc')
-        return (space ~= 0 and ' ' .. space)
+        local trailing_space_cnt = vim.fn.search([[\s\+$]], 'nwc')
+
+        return trailing_space_cnt ~= 0
+            and ('TR:%d'):format(trailing_space_cnt)
             or ''
     end,
     cond = function()
-        return conditions.hide_in_width() and conditions.mode_isnt_insert()
+        return conditions.hide_in_width() and vim.fn.mode() ~= 'i'
     end
 }
 
-components.filetype = {
-    'filetype',
-    icon = { align = 'right' },
-}
-
-components.window = function()
+components.window_number = function()
     return vim.api.nvim_win_get_number(0)
 end
 

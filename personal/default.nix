@@ -18,6 +18,10 @@ in {
     LD_LIBRARY_PATH    = "${pkgs.zlib}/lib:${pkgs.sqlite.out}/lib:$LD_LIBRARY_PATH";
     EDITOR             = "nvim";
     MANPAGER           = "sh -c 'col -bx | bat -l man -p'";
+    XDG_DATA_HOME      = "${config.home.homeDirectory}/.local/share";
+    XDG_CONFIG_HOME    = "${config.home.homeDirectory}/.config";
+    XDG_CACHE_HOME     = "${config.home.homeDirectory}/.cache";
+    XDG_STATE_HOME     = "${config.home.homeDirectory}/.local/state";
   };
 
   home.file."${datadir}/flatpak/overrides/global".text =

@@ -1,5 +1,14 @@
-{ pkgs, ... }: {
-  programs.neovim.plugins = (with pkgs.vimPlugins; 
+{ pkgs, lib, ... } : let
+mkPlugin = repo: { ref ? "main", host ? "github.com" } : pkgs.vimUtils.buildVimPluginFrom2Nix
+  { name = "${lib.strings.sanitizeDerivationName repo}";
+    version = ref;
+    src = builtins.fetchGit
+      { url = "https://${host}/${repo}.git";
+        inherit ref;
+      };
+  };
+in {
+  programs.neovim.plugins = (with pkgs.vimPlugins;
     [ FixCursorHold-nvim
       nvim-hlslens
       tabular
@@ -7,6 +16,7 @@
       vim-tmux-navigator
       wilder-nvim
       which-key-nvim
+      nvim-tree-lua
 
       undotree
       neogit
@@ -24,6 +34,8 @@
       null-ls-nvim
       lsp_signature-nvim
       rust-tools-nvim
+      clangd_extensions-nvim
+      neodev-nvim
       trouble-nvim
       fidget-nvim
 
@@ -32,7 +44,6 @@
       cmp-nvim-lsp
       cmp-buffer
       cmp-path
-      cmp-nvim-lua
       cmp-snippy
       crates-nvim
 
@@ -49,5 +60,8 @@
       telescope-frecency-nvim
 
       sonokai
+      direnv-vim
+
+      (mkPlugin "cljoly/telescope-repo.nvim" { ref = "master"; })
     ]);
 }

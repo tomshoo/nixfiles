@@ -1,12 +1,25 @@
+require('neodev').setup {
+    library      = {
+        enable  = true,
+        types   = true,
+        runtime = true,
+        plugins = { "neotest", "nvim-treesitter", "plenary.nvim" }
+    },
+
+    lspconfig    = true,
+    setup_jsonls = true,
+    pathStrict   = true,
+}
+
 require 'lsp.completions'
 require 'lsp.rust'
+require 'lsp.clangd'
 require 'lsp.null-ls'
 
 local lspconfig = require 'lspconfig'
 local signature = require 'lsp_signature'
-local servers   = {}
 
-require('fidget').setup {}
+local servers   = {}
 
 signature.setup {
     always_trigger = true,
@@ -24,12 +37,7 @@ servers.lua_ls = {
 }
 
 
-servers.tsserver = {
-    command = { { typescript.tsserverPath, "--stdio" } }
-}
-
-
-servers.clangd               = {}
+servers.bashls               = { filetypes = { "sh", "bash" } }
 servers.nil_ls               = {}
 servers.jedi_language_server = {}
 
@@ -45,7 +53,6 @@ for server, config in pairs(servers) do
 
     lspconfig[server].setup(config)
 end
-
 
 vim.api.nvim_create_autocmd({ "LspAttach" }, {
     group = vim.api.nvim_create_augroup('lspattach', { clear = true }),

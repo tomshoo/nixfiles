@@ -1,41 +1,10 @@
 { config, ... }: {
-  programs.starship =
-    { enable                = true;
-      enableBashIntegration = true;
-      enableZshIntegration  = true;
-      enableFishIntegration = true;
-
-      settings = {
-        command_timeout = 2000;
-        format          = "$all$hostname$status$character";
-        hostname        =
-          { ssh_only = false;
-            format   = "[$hostname]($style) ";
-          };
-        directory.format       = "inside [$path]($style)[$read_only]($read_only_style) ";
-        character.error_symbol = "[󰚌](bold red)";
-        status =
-          { disabled = false;
-            format   = "[$status]($style) ";
-          };
-      };
-    };
-
   programs.bash =
     { enable               = true;
       enableVteIntegration = true;
 
       historyIgnore =
-        [ "ls"
-          "exa"
-          "cd"
-          "clear"
-          "exit"
-          "history"
-          "file"
-          "z"
-          "zi"
-        ];
+        [ "ls" "exa" "cd" "clear" "exit" "history" "file" "z" "zi" ];
 
       sessionVariables =
         { FPATH = "$HOME/.config/bash/functions:$HOME/.bash/functions";
@@ -60,25 +29,42 @@
       enableAutosuggestions    = true;
       enableCompletion         = true;
       enableSyntaxHighlighting = true;
+      enableVteIntegration     = true;
 
       dotDir = ".config/zsh";
+      autocd = true;
 
-      oh-my-zsh =
-        { enable  = true;
-          plugins = [ "git" "command-not-found" "sudo" ];
+      history =
+        { extended              = true;
+          expireDuplicatesFirst = true;
+          ignoreDups            = true;
+          share                 = false;
         };
 
-      initExtra =
-        ''
-        ${builtins.readFile ./common.sh}
-        # Load custom functions
-        autoload -Uz ~/.config/zsh/functions/*
-        '';
-    };
+      shellAliases =
+        { clear-history = "echo > ~/.zsh_history";
+          grep          = "grep --color=auto";
+          ls            = "exa";
+        };
 
-  programs.fish =
-    { enable = true;
-      functions.fish_greeting = builtins.readFile ./fish/functions/fish_greeting.fish;
+      completionInit =
+        ''
+        autoload -U compinit     && compinit
+        autoload -U bashcompinit && bashcompinit
+        '';
+
+      initExtra               = builtins.readFile ./zsh/zshrc;
+      initExtraBeforeCompInit = builtins.readFile ./zsh/zshrc_pre_compinit;
+      initExtraFirst          =
+        ''
+        function __load_file() { [ -r "$1" ] && source "$1"; }
+        [[ -n "$(command ls -A "$ZDOTDIR/functions")" ]] && autoload -Uz "$ZDOTDIR/functions/"*
+        '';
+
+      localVariables =
+        { MANROFFOPT = "-c";
+          MANPAGER   = "sh -c 'col -bx | bat -l man -p'";
+        };
     };
 
   home.shellAliases =
@@ -87,7 +73,11 @@
     };
 
   xdg.configFile =
-    { "zsh/functions".source = ./zsh/functions;
+    { "zsh/functions".source        = ./zsh/functions;
+      "zsh/zsh_aliases".source      = ./zsh/zsh_aliases;
+      "zsh/zsh_abbrevations".source = ./zsh/zsh_abbrevations;
+      "zsh/zsh_prompt".source       = ./zsh/zsh_prompt;
+      "zsh/zsh_vcs".source          = ./zsh/zsh_vcs;
     };
 
   xdg.configFile =

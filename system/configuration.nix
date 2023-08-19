@@ -1,6 +1,6 @@
-{ pkgs, ... } : {
+{ pkgs, lib, ... } : {
   networking.networkmanager.enable = true;
-  networking.nameservers = [ "1.1.1.1" "1.1.0.1" ];
+  networking.nameservers = lib.mkDefault [ "1.1.1.1" "1.1.0.1" ];
 
   time = {
     timeZone = "Asia/Kolkata";

@@ -1,4 +1,4 @@
-return function(client, bufnr)
+return function (client, bufnr)
     if not client.server_capabilities.documentHighlightProvider then return end
 
     vim.cmd [[
@@ -20,7 +20,7 @@ return function(client, bufnr)
         callback = vim.lsp.buf.document_highlight,
     })
 
-    vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI', 'BufWinLeave', 'WinLeave', 'FocusLost' }, {
+    vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
         group = 'lsp_document_highlight',
         buffer = bufnr,
         callback = vim.lsp.buf.clear_references,

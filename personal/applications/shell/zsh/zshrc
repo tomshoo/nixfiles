@@ -1,0 +1,46 @@
+export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=50
+export HIST_STAMPS="yyyy-mm-dd"
+
+setopt chase_links
+setopt pushd_silent
+setopt pushd_to_home
+setopt auto_param_keys
+setopt bad_pattern
+setopt append_history
+setopt hist_find_no_dups
+setopt hist_no_store
+setopt hist_reduce_blanks
+setopt hist_save_no_dups
+setopt aliases
+setopt interactive_comments
+setopt hash_cmds
+setopt hash_executables_only
+setopt prompt_subst
+
+__load_file "$ZDOTDIR/zsh_vcs"
+__load_file "$ZDOTDIR/zsh_abbrevations"
+__load_file "$ZDOTDIR/zsh_prompt"
+__load_file "$ZDOTDIR/zsh_aliases"
+
+if (( $+functions[zsh_add_snippet] )); then
+    zsh_add_snippet 'omz:lib/history.zsh'
+    zsh_add_snippet 'omz:lib/key-bindings.zsh'
+
+    __load_file /usr/share/fzf/key-bindings.zsh ||
+        __load_file /usr/share/doc/fzf/examples/key-bindings.zsh ||
+        zsh_add_snippet 'fzf:shell/key-bindings.zsh'
+fi
+
+(( $+functions[zsh_greeting] )) && zsh_greeting
+
+set-window-title() {
+  window_title="\e]0;${${PWD/#"$HOME"/~}/projects/p}\a"
+  echo -ne "$window_title"
+}; set-window-title
+add-zsh-hook precmd set-window-title
+
+bindkey ' '  _expand_abbrevation
+bindkey '^ ' magic-space
+bindkey -M isearch ' ' magic-space
+

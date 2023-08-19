@@ -5,5 +5,5 @@ local diag = nls.builtins.diagnostics
 nls.setup { sources = {
     fmt.autopep8,
     diag.shellcheck,
-    diag.pylint,
+    diag.fish,
 } }

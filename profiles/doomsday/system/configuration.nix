@@ -30,7 +30,7 @@ in
 
   programs.zsh.enable = true;
   environment =
-    { shells         = with pkgs; [ zsh ];
+    { shells         = with pkgs; [ zsh fish ];
       systemPackages = with pkgs;
         [ neovim
           file
@@ -43,4 +43,11 @@ in
 
       variables.NIXPKGS_ALLOW_UNFREE = "1";
     };
+
+  systemd.packages = [ pkgs-unstable.cloudflare-warp ];
+  services.cloudflare-warp =
+    { enable = true;
+      package = pkgs-unstable.cloudflare-warp;
+    };
+
 }

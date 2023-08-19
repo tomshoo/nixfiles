@@ -16,11 +16,7 @@ conditions.check_git_workspace = function()
 end
 
 conditions.lsp_is_active = function()
-    return #(vim.lsp.buf_get_clients()) ~= 0
-end
-
-conditions.mode_isnt_insert = function()
-    return vim.fn.mode() ~= 'i'
+    return #(vim.lsp.get_active_clients({ bufnr = vim.fn.bufnr() })) ~= 0
 end
 
 return conditions

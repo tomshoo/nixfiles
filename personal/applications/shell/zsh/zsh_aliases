@@ -1,0 +1,8 @@
+autoload -Uz run-help
+unalias run-help
+
+abbrev rebuild-system "sudo nixos-rebuild boot --flake"
+
+function help() { run-help "$@" 2>&1 | bat --plain --language=man; }
+function fzf()  { if [ -n "$TMUX" ]; then command fzf "$@"; else command fzf-tmux "$@"; fi }
+

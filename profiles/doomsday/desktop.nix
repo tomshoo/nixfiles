@@ -1,4 +1,5 @@
 { pkgs,
+  pkgs-unstable,
   ...
 } : let
   extensions = with pkgs.gnomeExtensions;
@@ -13,6 +14,7 @@
       rounded-window-corners
       disable-menu-switching
       task-widget
+      dash-to-dock
       gesture-improvements
     ];
 in
@@ -34,16 +36,17 @@ in
   environment.gnome.excludePackages = with pkgs;
     [ gnome-console
       gnome.gnome-music
+      gnome.totem
     ];
 
   environment.systemPackages =
-    extensions
-    ++(with pkgs;
-      [ blackbox-terminal
-        amberol
-        endeavour
-        gnome.gnome-tweaks
-      ]);
+    (with pkgs; [
+      pkgs-unstable.blackbox-terminal
+      amberol
+      endeavour
+      mpv
+      gnome.gnome-tweaks
+    ]) ++ extensions;
 
   xdg.portal.enable = true;
   programs.gnome-terminal.enable = true;
