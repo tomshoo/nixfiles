@@ -28,7 +28,7 @@
   programs.git = {
     enable = true;
     userName = "Shubhanshu Tomar";
-    userEmail = "tomarshubhanshu@protonmail.ch";
+    userEmail = "57960301+tomshoo@users.noreply.github.com";
     extraConfig = {
       credential."https://gitlab.com".helper = "${pkgs-unstable.glab}/bin/glab auth git-credential";
       url = {
